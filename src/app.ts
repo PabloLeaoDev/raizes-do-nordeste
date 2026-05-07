@@ -1,10 +1,41 @@
 import Fastify from "fastify";
-import { authRoutes } from "./api/routes/auth.routes";
-// importar os outros módulos
+import { serializerCompiler, validatorCompiler, jsonSchemaTransform, ZodTypeProvider } from "fastify-type-provider-zod";
+import fastifySwagger from "@fastify/swagger";
+import fastifySwaggerUI from "@fastify/swagger-ui";
 
-export const app = Fastify({ logger: true });
+import { authRoutes } from "./api/routes/auth.routes";
+import { productRoutes } from "./api/routes/product.routes";
+import { orderRoutes } from "./api/routes/order.routes";
+
+export const app = Fastify({ logger: true }).withTypeProvider<ZodTypeProvider>();
+
+app.setValidatorCompiler(validatorCompiler);
+app.setSerializerCompiler(serializerCompiler);
+
+app.register(fastifySwagger, {
+  openapi: {
+    info: {
+      title: "Raízes do Nordeste API",
+      description: "API para a rede de lanchonetes Raízes do Nordeste",
+      version: "1.0.0",
+    },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
+  },
+  transform: jsonSchemaTransform,
+});
+
+app.register(fastifySwaggerUI, {
+  routePrefix: "/api-docs",
+});
 
 app.register(authRoutes);
-// app.register(produtoRoutes);
-// app.register(estoqueRoutes);
-// app.register(pedidoRoutes);
+app.register(productRoutes);
+app.register(orderRoutes);

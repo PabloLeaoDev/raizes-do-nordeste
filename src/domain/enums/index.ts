@@ -1,0 +1,21 @@
+export enum OrderStatus {
+  AGUARDANDO_PAGAMENTO = 'AGUARDANDO_PAGAMENTO',
+  RECEBIDO = 'RECEBIDO',
+  EM_PREPARACAO = 'EM_PREPARACAO',
+  PRONTO = 'PRONTO',
+  FINALIZADO = 'FINALIZADO',
+  CANCELADO = 'CANCELADO',
+}
+
+export enum OrderChannel {
+  APP = 'APP',
+  TOTEM = 'TOTEM',
+  WEB = 'WEB',
+}
+
+export enum UserProfile {
+  ADMIN = 'ADMIN',
+  GERENTE = 'GERENTE',
+  ATENDENTE = 'ATENDENTE',
+  CLIENTE = 'CLIENTE',
+}

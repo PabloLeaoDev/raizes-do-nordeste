@@ -22,12 +22,13 @@ export class AuthService {
       { expiresIn: "3h" }
     );
 
-    return { token, user };
+    const { senha_hash, ...userWithoutPassword } = user;
+    return { token, user: userWithoutPassword };
   }
 
   async signup(nome: string, email: string, senha: string, perfil: string) {
     const senhaHash = await bcrypt.hash(senha, 10);
-    const user = await this.repo.create({ nome, email, senhaHash, perfil });
+    const user = await this.repo.create({ nome, email, senhaHash, perfil: perfil as any });
 
     const token = jwt.sign(
       {

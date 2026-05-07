@@ -5,15 +5,22 @@
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "test": "jest"
+    "test": "jest",
+    "migrate:up": "node -r dotenv/config node_modules/.bin/node-pg-migrate -j ts up",
+    "migrate:down": "node -r dotenv/config node_modules/.bin/node-pg-migrate -j ts down",
+    "migrate:create": "node -r dotenv/config node_modules/.bin/node-pg-migrate -j ts create"
   },
   "dependencies": {
+    "@fastify/swagger": "^9.7.0",
+    "@fastify/swagger-ui": "^5.2.6",
     "bcrypt": "^5",
     "dotenv": "^16",
     "fastify": "^5.8.5",
+    "fastify-type-provider-zod": "^6.1.0",
     "jsonwebtoken": "^9",
+    "node-pg-migrate": "^8.0.4",
     "pg": "^8",
-    "zod": "^3"
+    "zod": "^4.4.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
@@ -24,6 +31,7 @@
     "@types/pg": "^8.20.0",
     "jest": "^29",
     "ts-jest": "^29",
+    "ts-node": "^10.9.2",
     "tsx": "^4",
     "typescript": "^5"
   }

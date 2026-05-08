@@ -6,9 +6,12 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "test": "jest",
-    "migrate:up": "node -r dotenv/config node_modules/.bin/node-pg-migrate -j ts up",
-    "migrate:down": "node -r dotenv/config node_modules/.bin/node-pg-migrate -j ts down",
-    "migrate:create": "node -r dotenv/config node_modules/.bin/node-pg-migrate -j ts create"
+    "services:up": "docker-compose up -d",
+    "services:stop": "docker-compose stop",
+    "services:down": "docker-compose down",
+    "migrate:up": "node-pg-migrate -j ts up",
+    "migrate:down": "node-pg-migrate -j ts down",
+    "migrate:create": "node-pg-migrate -j ts create"
   },
   "dependencies": {
     "@fastify/swagger": "^9.7.0",

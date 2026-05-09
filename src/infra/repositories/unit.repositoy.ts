@@ -1,4 +1,4 @@
-import { pool } from "../db/client";
+import pool from "../db/database";
 
 export class UnitRepository {
   async create(nome: string, endereco: string) {

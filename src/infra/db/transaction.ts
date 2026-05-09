@@ -1,4 +1,4 @@
-import { pool } from "./client";
+import pool from "./database";
 
 export async function withTransaction<T>(callback: (client: any) => Promise<T>) {
     const client = await pool.connect();

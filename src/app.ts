@@ -6,6 +6,7 @@ import fastifySwaggerUI from "@fastify/swagger-ui";
 import { authRoutes } from "./api/routes/auth.routes";
 import { productRoutes } from "./api/routes/product.routes";
 import { orderRoutes } from "./api/routes/order.routes";
+import { unitRoutes } from "./api/routes/unit.routes";
 
 export const app = Fastify({ logger: true }).withTypeProvider<ZodTypeProvider>();
 
@@ -39,3 +40,4 @@ app.register(fastifySwaggerUI, {
 app.register(authRoutes);
 app.register(productRoutes);
 app.register(orderRoutes);
+app.register(unitRoutes);

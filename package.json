@@ -9,8 +9,8 @@
     "services:up": "docker-compose up -d",
     "services:stop": "docker-compose stop",
     "services:down": "docker-compose down",
-    "migrate:up": "node-pg-migrate -j ts up",
-    "migrate:down": "node-pg-migrate -j ts down",
+    "migrate:up": "npm run build && node-pg-migrate -m ./dist/infra/db/migrations up",
+    "migrate:down": "npm run build && node-pg-migrate -m ./dist/infra/db/migrations down",
     "migrate:create": "node-pg-migrate -j ts create"
   },
   "dependencies": {

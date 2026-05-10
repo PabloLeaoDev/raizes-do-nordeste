@@ -1,19 +1,17 @@
 import { OrderService } from "../../services/order.service";
 import { FastifyRequest, FastifyReply } from "fastify";
-import { z } from "zod";
-import { createOrderSchema, updateOrderStatusSchema } from "../schemas/order.schema";
 
 const service = new OrderService();
 
 export class OrderController {
   async create(req: FastifyRequest | any, reply: FastifyReply) {
     const user = (req as any).user;
-    
+
     const result = await service.criarPedido({
       ...req.body,
       usuario_id: user.id
     });
-    
+
     return reply.code(201).send(result);
   }
 

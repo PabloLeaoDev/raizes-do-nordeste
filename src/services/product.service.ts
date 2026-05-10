@@ -1,5 +1,4 @@
 import { ProductRepository } from "../infra/repositories/product.repository";
-import pool from '../infra/db/database';
 
 export class ProductService {
   private repo = new ProductRepository();

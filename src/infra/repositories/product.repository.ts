@@ -28,7 +28,7 @@ export class ProductRepository {
     return result.rows[0];
   }
 
-  async updateStock(id: string, novoEstoque: number, client: PoolClient): Promise<void> {
-    await client.query('UPDATE produto SET estoque_total = $1 WHERE id = $2', [novoEstoque, id]);
+  async updateStock(id: string, newStock: number, client: PoolClient): Promise<void> {
+    await client.query('UPDATE produto SET estoque_total = $1 WHERE id = $2', [newStock, id]);
   }
 }

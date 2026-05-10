@@ -6,3 +6,10 @@ export const createProductSchema = z.object({
   preco: z.number().positive(),
   estoque_total: z.number().int().nonnegative().default(0),
 });
+
+export const updateProductSchema = z.object({
+  nome: z.string().min(3).optional(),
+  descricao: z.string().optional(),
+  preco: z.number().positive().optional(),
+  estoque_total: z.number().int().nonnegative().optional(),
+});

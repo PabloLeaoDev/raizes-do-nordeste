@@ -15,6 +15,7 @@ app.setSerializerCompiler(serializerCompiler);
 
 app.register(fastifySwagger, {
   openapi: {
+    openapi: "3.0.3",
     info: {
       title: "Raízes do Nordeste API",
       description: "API para a rede de lanchonetes Raízes do Nordeste",
@@ -30,11 +31,11 @@ app.register(fastifySwagger, {
       },
     },
   },
-  transform: jsonSchemaTransform,
+  transform: jsonSchemaTransform
 });
 
 app.register(fastifySwaggerUI, {
-  routePrefix: "/api-docs",
+  routePrefix: "/api-docs"
 });
 
 app.register(authRoutes);

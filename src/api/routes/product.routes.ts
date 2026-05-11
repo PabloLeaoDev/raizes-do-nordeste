@@ -1,5 +1,5 @@
 import { ProductController } from "../controllers/product.controller";
-import { createProductSchema } from "../schemas/product.schema";
+import { createProductSchema, updateProductSchema } from "../schemas/product.schema";
 import { verifyJwt, verifyProfile } from "../middlewares/auth.middleware";
 import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
@@ -17,9 +17,30 @@ export const productRoutes: FastifyPluginAsyncZod = async (app) => {
   });
 
   app.get("/produtos", {
+    preHandler: [verifyJwt, verifyProfile(["ADMIN", "GERENTE"])],
     schema: {
-      tags: ['Products']
+      tags: ['Products'],
+      security: [{ bearerAuth: [] }]
     },
     handler: controller.list.bind(controller)
+  });
+
+  app.put("/produtos/:id", {
+    preHandler: [verifyJwt, verifyProfile(["ADMIN", "GERENTE"])],
+    schema: {
+      tags: ['Products'],
+      security: [{ bearerAuth: [] }],
+      body: updateProductSchema
+    },
+    handler: controller.update.bind(controller)
+  });
+
+  app.delete("/produtos/:id", {
+    preHandler: [verifyJwt, verifyProfile(["ADMIN", "GERENTE"])],
+    schema: {
+      tags: ['Products'],
+      security: [{ bearerAuth: [] }],
+    },
+    handler: controller.delete.bind(controller)
   });
 };

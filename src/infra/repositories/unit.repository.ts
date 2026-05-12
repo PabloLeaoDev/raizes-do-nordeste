@@ -13,24 +13,26 @@ export class UnitRepository {
     }
 
     async update(id: string, data: { nome?: string; endereco?: string; }): Promise<Unit> {
-        let unitResult = {} as QueryResult<Unit>;
+        let unitResult = {} as QueryResult<Unit>,
+        query = "UPDATE unidade SET ",
+        queryValues: Array<string | number> = [],
+        queryCount = 1;
 
-        if (data.nome && data.endereco) {
-            unitResult = await pool.query(
-                `UPDATE unidade SET nome = $1, endereco = $2 WHERE id = $3 RETURNING *`,
-                [data.nome, data.endereco, id]
-            );
-        } else if (data.nome) {
-            unitResult = await pool.query(
-                `UPDATE unidade SET nome = $1 WHERE id = $2 RETURNING *`,
-                [data.nome, id]
-            );
-        } else if (data.endereco) {
-            unitResult = await pool.query(
-                `UPDATE unidade SET endereco = $1 WHERE id = $2 RETURNING *`,
-                [data.endereco, id]
-            );
+        const dataList = Object.entries(data);
+
+        for (let i = 0; i < dataList.length; i++) {
+            const currentDataListElement = dataList[i];
+            if (currentDataListElement[1]) {
+                queryValues.push(currentDataListElement[1]);
+                query += `${currentDataListElement[0]} = $${queryCount}, `;
+                queryCount++;
+            }
         }
+
+        query += `WHERE id = $${queryCount} RETURNING *`;
+        query = query.replace(", WHERE", " WHERE");
+
+        unitResult = await pool.query(query, [...queryValues, id]);
 
         return unitResult.rows[0];
     }

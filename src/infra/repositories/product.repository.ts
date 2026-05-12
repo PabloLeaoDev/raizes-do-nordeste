@@ -1,7 +1,6 @@
 import pool from '../db/database';
 import { Product } from '../../domain/entities';
 import { PoolClient, QueryResult } from 'pg';
-import { CLIENT_RENEG_LIMIT } from 'tls';
 
 export class ProductRepository {
   async create(data: any, client: PoolClient | typeof pool = pool): Promise<Product> {

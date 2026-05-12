@@ -1,6 +1,7 @@
 import pool from '../db/database';
 import { Product } from '../../domain/entities';
 import { PoolClient, QueryResult } from 'pg';
+import { CLIENT_RENEG_LIMIT } from 'tls';
 
 export class ProductRepository {
   async create(data: any, client: PoolClient | typeof pool = pool): Promise<Product> {
@@ -14,38 +15,38 @@ export class ProductRepository {
   }
 
   async update(id: string, data: { nome?: string, descricao?: string, preco?: number, estoque_total?: number; }): Promise<Product> {
-      let productResult = {} as QueryResult<Product>,
-        query = "UPDATE produto SET ",
-        queryValues: Array<string | number> = [],
-        queryCount = 1;
+    let productResult = {} as QueryResult<Product>,
+      query = "UPDATE produto SET ",
+      queryValues: Array<string | number> = [],
+      queryCount = 1;
 
-      const dataList = Object.entries(data);
+    const dataList = Object.entries(data);
 
-      for (let i = 0; i < dataList.length; i++) {
-        const currentDataListElement = dataList[i];
-        if (currentDataListElement[1]) {
-          queryValues.push(currentDataListElement[1]);
-          query += `${currentDataListElement[0]} = ${queryCount}, `;
-          queryCount++;
-        }
+    for (let i = 0; i < dataList.length; i++) {
+      const currentDataListElement = dataList[i];
+      if (currentDataListElement[1]) {
+        queryValues.push(currentDataListElement[1]);
+        query += `${currentDataListElement[0]} = $${queryCount}, `;
+        queryCount++;
       }
-
-      query += `WHERE id = ${queryCount} RETURNING *`;
-      query.replace(", WHERE", " WHERE");
-
-      productResult = await pool.query(query, [...queryValues, id]);
-
-      return productResult.rows[0];
     }
 
-    async delete(id: string): Promise<Product> {
-      const productResult = await pool.query(
-          `DELETE FROM produto WHERE id = $1 RETURNING *`,
-          [id]
-      );
+    query += `WHERE id = $${queryCount} RETURNING *`;
+    query = query.replace(", WHERE", " WHERE");
 
-      return productResult.rows[0];
-    }
+    productResult = await pool.query(query, [...queryValues, id]);
+
+    return productResult.rows[0];
+  }
+
+  async delete(id: string): Promise<Product> {
+    const productResult = await pool.query(
+      `DELETE FROM produto WHERE id = $1 RETURNING *`,
+      [id]
+    );
+
+    return productResult.rows[0];
+  }
 
   async findAll(): Promise<Product[]> {
     const result = await pool.query('SELECT * FROM produto ORDER BY nome ASC');

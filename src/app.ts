@@ -18,7 +18,7 @@ app.register(fastifySwagger, {
     openapi: "3.0.3",
     info: {
       title: "Raízes do Nordeste API",
-      description: "API para a rede de lanchonetes Raízes do Nordeste",
+      description: "API for the Raízes do Nordeste fast food chains",
       version: "1.0.0",
     },
     components: {
@@ -36,6 +36,15 @@ app.register(fastifySwagger, {
 
 app.register(fastifySwaggerUI, {
   routePrefix: "/api-docs"
+});
+
+app.get("/", async () => {
+  return {
+    title: "Raízes do Nordeste API",
+    description: "API for the Raízes do Nordeste fast food chains",
+    version: "1.0.0",
+    message: "Server is running. Visit /api-docs to see the documentation."
+  };
 });
 
 app.register(authRoutes);

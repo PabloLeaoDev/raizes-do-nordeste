@@ -22,10 +22,7 @@
     "schemas": {
       "LoginBody": {
         "type": "object",
-        "required": [
-          "email",
-          "senha"
-        ],
+        "required": ["email", "senha"],
         "properties": {
           "email": {
             "type": "string",
@@ -39,11 +36,7 @@
       },
       "SignupBody": {
         "type": "object",
-        "required": [
-          "nome",
-          "email",
-          "senha"
-        ],
+        "required": ["nome", "email", "senha"],
         "properties": {
           "nome": {
             "type": "string",
@@ -59,12 +52,7 @@
           },
           "perfil": {
             "type": "string",
-            "enum": [
-              "ADMIN",
-              "GERENTE",
-              "ATENDENTE",
-              "CLIENTE"
-            ],
+            "enum": ["ADMIN", "GERENTE", "ATENDENTE", "CLIENTE"],
             "default": "CLIENTE"
           }
         }
@@ -94,12 +82,7 @@
           },
           "perfil": {
             "type": "string",
-            "enum": [
-              "ADMIN",
-              "GERENTE",
-              "ATENDENTE",
-              "CLIENTE"
-            ]
+            "enum": ["ADMIN", "GERENTE", "ATENDENTE", "CLIENTE"]
           },
           "createdAt": {
             "type": "string",
@@ -146,10 +129,7 @@
       },
       "CreateProductBody": {
         "type": "object",
-        "required": [
-          "nome",
-          "preco"
-        ],
+        "required": ["nome", "preco"],
         "properties": {
           "nome": {
             "type": "string",
@@ -191,10 +171,7 @@
       },
       "OrderItem": {
         "type": "object",
-        "required": [
-          "produto_id",
-          "quantidade"
-        ],
+        "required": ["produto_id", "quantidade"],
         "properties": {
           "produto_id": {
             "type": "string",
@@ -208,11 +185,7 @@
       },
       "CreateOrderBody": {
         "type": "object",
-        "required": [
-          "unidade_id",
-          "canal",
-          "itens"
-        ],
+        "required": ["unidade_id", "canal", "itens"],
         "properties": {
           "unidade_id": {
             "type": "string",
@@ -220,11 +193,7 @@
           },
           "canal": {
             "type": "string",
-            "enum": [
-              "APP",
-              "TOTEM",
-              "WEB"
-            ]
+            "enum": ["APP", "TOTEM", "WEB"]
           },
           "itens": {
             "type": "array",
@@ -248,11 +217,7 @@
           },
           "canal": {
             "type": "string",
-            "enum": [
-              "APP",
-              "TOTEM",
-              "WEB"
-            ]
+            "enum": ["APP", "TOTEM", "WEB"]
           },
           "status": {
             "type": "string",
@@ -286,9 +251,7 @@
       },
       "UpdateOrderStatusBody": {
         "type": "object",
-        "required": [
-          "status"
-        ],
+        "required": ["status"],
         "properties": {
           "status": {
             "type": "string",
@@ -328,10 +291,7 @@
       },
       "CreateUnitBody": {
         "type": "object",
-        "required": [
-          "nome",
-          "endereco"
-        ],
+        "required": ["nome", "endereco"],
         "properties": {
           "nome": {
             "type": "string"
@@ -372,9 +332,7 @@
   "paths": {
     "/auth/login": {
       "post": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "summary": "Autenticar usuário",
         "requestBody": {
           "required": true,
@@ -422,9 +380,7 @@
     },
     "/auth/signup": {
       "post": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "summary": "Criar novo usuário",
         "requestBody": {
           "required": true,
@@ -472,9 +428,7 @@
     },
     "/produtos": {
       "get": {
-        "tags": [
-          "Products"
-        ],
+        "tags": ["Products"],
         "summary": "Listar todos os produtos",
         "security": [
           {
@@ -501,9 +455,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Products"
-        ],
+        "tags": ["Products"],
         "summary": "Criar um novo produto",
         "security": [
           {
@@ -550,9 +502,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Products"
-        ],
+        "tags": ["Products"],
         "summary": "Atualizar um produto",
         "security": [
           {
@@ -599,9 +549,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Products"
-        ],
+        "tags": ["Products"],
         "summary": "Deletar um novo produto",
         "security": [
           {
@@ -640,9 +588,7 @@
     },
     "/pedidos": {
       "get": {
-        "tags": [
-          "Orders"
-        ],
+        "tags": ["Orders"],
         "summary": "Listar pedidos (perfis: ADMIN, GERENTE, ATENDENTE)",
         "security": [
           {
@@ -672,9 +618,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Orders"
-        ],
+        "tags": ["Orders"],
         "summary": "Criar um novo pedido",
         "security": [
           {
@@ -720,9 +664,7 @@
     },
     "/pedidos/{id}/status": {
       "patch": {
-        "tags": [
-          "Orders"
-        ],
+        "tags": ["Orders"],
         "summary": "Atualizar status de um pedido (perfis: ADMIN, GERENTE, ATENDENTE)",
         "security": [
           {
@@ -785,9 +727,7 @@
     },
     "/unidades": {
       "get": {
-        "tags": [
-          "Units"
-        ],
+        "tags": ["Units"],
         "summary": "Listar unidades (perfis: ADMIN, GERENTE)",
         "security": [
           {
@@ -817,9 +757,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Units"
-        ],
+        "tags": ["Units"],
         "summary": "Criar unidade (apenas ADMIN)",
         "security": [
           {
@@ -868,9 +806,7 @@
     },
     "/unidades/{id}": {
       "get": {
-        "tags": [
-          "Units"
-        ],
+        "tags": ["Units"],
         "summary": "Buscar unidade por ID (perfis: ADMIN, GERENTE)",
         "security": [
           {
@@ -911,9 +847,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Units"
-        ],
+        "tags": ["Units"],
         "summary": "Atualizar unidade (apenas ADMIN)",
         "security": [
           {
@@ -974,9 +908,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Units"
-        ],
+        "tags": ["Units"],
         "summary": "Remover unidade (apenas ADMIN)",
         "security": [
           {

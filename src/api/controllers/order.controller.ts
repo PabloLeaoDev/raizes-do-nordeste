@@ -9,7 +9,7 @@ export class OrderController {
 
     const result = await service.criarPedido({
       ...req.body,
-      usuario_id: user.id
+      usuario_id: user.id,
     });
 
     return reply.code(201).send(result);

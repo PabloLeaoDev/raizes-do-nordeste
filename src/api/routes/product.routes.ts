@@ -1,7 +1,10 @@
 import { ProductController } from "../controllers/product.controller";
-import { createProductSchema, updateProductSchema } from "../schemas/product.schema";
+import {
+  createProductSchema,
+  updateProductSchema,
+} from "../schemas/product.schema";
 import { verifyJwt, verifyProfile } from "../middlewares/auth.middleware";
-import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
+import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 
 const controller = new ProductController();
 
@@ -9,38 +12,38 @@ export const productRoutes: FastifyPluginAsyncZod = async (app) => {
   app.post("/produtos", {
     preHandler: [verifyJwt, verifyProfile(["ADMIN", "GERENTE"])],
     schema: {
-      tags: ['Products'],
+      tags: ["Products"],
       security: [{ bearerAuth: [] }],
-      body: createProductSchema
+      body: createProductSchema,
     },
-    handler: controller.create.bind(controller)
+    handler: controller.create.bind(controller),
   });
 
   app.get("/produtos", {
     preHandler: [verifyJwt, verifyProfile(["ADMIN", "GERENTE"])],
     schema: {
-      tags: ['Products'],
-      security: [{ bearerAuth: [] }]
+      tags: ["Products"],
+      security: [{ bearerAuth: [] }],
     },
-    handler: controller.list.bind(controller)
+    handler: controller.list.bind(controller),
   });
 
   app.put("/produtos/:id", {
     preHandler: [verifyJwt, verifyProfile(["ADMIN", "GERENTE"])],
     schema: {
-      tags: ['Products'],
+      tags: ["Products"],
       security: [{ bearerAuth: [] }],
-      body: updateProductSchema
+      body: updateProductSchema,
     },
-    handler: controller.update.bind(controller)
+    handler: controller.update.bind(controller),
   });
 
   app.delete("/produtos/:id", {
     preHandler: [verifyJwt, verifyProfile(["ADMIN", "GERENTE"])],
     schema: {
-      tags: ['Products'],
+      tags: ["Products"],
       security: [{ bearerAuth: [] }],
     },
-    handler: controller.delete.bind(controller)
+    handler: controller.delete.bind(controller),
   });
 };

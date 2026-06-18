@@ -13,21 +13,21 @@ export class ProductController {
     const product = await service.findById(req.params.id);
 
     if (!product) {
-        throw new Error('Produto não encontrado');
+      throw new Error("Produto não encontrado");
     } else if (
-      !req.body.nome
-      && !req.body.preco
-      && !req.body.descricao
-      && !req.body.estoque_total
+      !req.body.nome &&
+      !req.body.preco &&
+      !req.body.descricao &&
+      !req.body.estoque_total
     ) {
-        throw new Error('Dados inválidos para atualizar');
+      throw new Error("Dados inválidos para atualizar");
     } else if (
-      req.body.nome === product.nome
-      && req.body.preco === product.preco
-      && req.body.descricao === product.descricao
-      && req.body.estoque_total === product.estoque_total
+      req.body.nome === product.nome &&
+      req.body.preco === product.preco &&
+      req.body.descricao === product.descricao &&
+      req.body.estoque_total === product.estoque_total
     ) {
-        throw new Error('Produto já atualizado');
+      throw new Error("Produto já atualizado");
     }
 
     const result = await service.updateProduct(req.params.id, req.body);
@@ -39,7 +39,7 @@ export class ProductController {
     const unit = await service.findById(req.params.id);
 
     if (!unit) {
-        throw new Error('Unidade não encontrada');
+      throw new Error("Unidade não encontrada");
     }
 
     const result = await service.deleteProduct(req.params.id);

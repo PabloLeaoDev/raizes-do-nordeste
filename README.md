@@ -58,6 +58,7 @@ docker compose up -d
 ```
 
 Isso irá:
+
 1. Criar e iniciar o banco de dados PostgreSQL
 2. Criar e iniciar o backend Node.js
 
@@ -99,6 +100,7 @@ exit
 ```
 
 Agora você pode fazer login com o usuário admin:
+
 - **Email:** [EMAIL_ADDRESS]`
 - **Senha:** `admin123`
 
@@ -127,10 +129,12 @@ npm run test:unit
 ## 🔐 Endpoints Principais
 
 ### Autenticação
+
 - `POST /auth/register` - Registrar usuário
 - `POST /auth/login` - Login de usuário
 
 ### Produtos
+
 - `POST /produtos` - Criar produto (ADMIN, GERENTE)
 - `GET /produtos` - Listar produtos (TODOS)
 - `GET /produtos/:id` - Buscar produto por ID (TODOS)
@@ -138,11 +142,13 @@ npm run test:unit
 - `DELETE /produtos/:id` - Deletar produto (ADMIN)
 
 ### Usuários
+
 - `GET /usuarios` - Listar usuários (ADMIN, GERENTE)
 - `GET /usuarios/:id` - Buscar usuário por ID (ADMIN, GERENTE)
 - `PATCH /usuarios/:id` - Atualizar usuário (ADMIN, GERENTE)
 
 ### Pedidos
+
 - `POST /pedidos` - Criar pedido (TODOS)
 - `GET /pedidos` - Listar pedidos (ADMIN, GERENTE, ATENDENTE)
 - `PATCH /pedidos/:id/status` - Atualizar status do pedido (ADMIN, GERENTE, ATENDENTE)

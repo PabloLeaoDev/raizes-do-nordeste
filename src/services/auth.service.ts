@@ -16,10 +16,10 @@ export class AuthService {
     const token = jwt.sign(
       {
         id: user.id,
-        perfil: user.perfil
+        perfil: user.perfil,
       },
       process.env.JWT_SECRET!,
-      { expiresIn: "3h" }
+      { expiresIn: "3h" },
     );
 
     const { senha_hash, ...userWithoutPassword } = user;
@@ -28,15 +28,20 @@ export class AuthService {
 
   async signup(nome: string, email: string, senha: string, perfil: string) {
     const senhaHash = await bcrypt.hash(senha, 10);
-    const user = await this.repo.create({ nome, email, senhaHash, perfil: perfil as any });
+    const user = await this.repo.create({
+      nome,
+      email,
+      senhaHash,
+      perfil: perfil as any,
+    });
 
     const token = jwt.sign(
       {
         id: user.id,
-        perfil: user.perfil
+        perfil: user.perfil,
       },
       process.env.JWT_SECRET!,
-      { expiresIn: "3h" }
+      { expiresIn: "3h" },
     );
 
     return { token, user };

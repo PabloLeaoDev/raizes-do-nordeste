@@ -1,12 +1,12 @@
 import { z } from "zod";
 
 export const createOrderSchema = z.object({
-  unidade_id: z.string().uuid(),
+  unidade_id: z.uuid(),
   canal: z.enum(["APP", "TOTEM", "WEB"]),
   itens: z
     .array(
       z.object({
-        produto_id: z.string().uuid(),
+        produto_id: z.uuid(),
         quantidade: z.number().int().positive(),
       }),
     )

@@ -5,6 +5,7 @@ export const createProductSchema = z.object({
   descricao: z.string().optional(),
   preco: z.number().positive(),
   estoque_total: z.number().int().nonnegative().default(0),
+  unidade_id: z.uuid(),
 });
 
 export const updateProductSchema = z.object({
@@ -12,4 +13,5 @@ export const updateProductSchema = z.object({
   descricao: z.string().optional(),
   preco: z.number().positive().optional(),
   estoque_total: z.number().int().nonnegative().optional(),
+  unidade_id: z.uuid().optional(),
 });

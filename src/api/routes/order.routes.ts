@@ -34,7 +34,7 @@ export const orderRoutes: FastifyPluginAsyncZod = async (app) => {
     schema: {
       tags: ["Orders"],
       security: [{ bearerAuth: [] }],
-      params: z.object({ id: z.string().uuid() }),
+      params: z.object({ id: z.uuid() }),
       body: updateOrderStatusSchema,
     },
     handler: controller.updateStatus.bind(controller),

@@ -1,7 +1,7 @@
 import { exec } from "node:child_process";
 import os from "node:os";
 
-function execAsync(cmd: any) {
+function execAsync(cmd: string) {
   return new Promise((resolve, reject) => {
     exec(cmd, (error, stdout) => {
       if (error) reject(error);

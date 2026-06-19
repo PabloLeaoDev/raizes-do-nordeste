@@ -46,9 +46,9 @@ DB_HOST=localhost
 DB_PORT=5432
 DB_USER=postgres
 DB_PASSWORD=postgres
-DB_NAME=raizes-do-nordeste-dev
+DB_NAME=raizes-db
 
-DATABASE_URL=postgres://postgres:postgres@localhost:5432/raizes-do-nordeste-dev
+DATABASE_URL=postgres://postgres:postgres@localhost:5432/raizes-db
 
 JWT_SECRET=supersecret
 ```

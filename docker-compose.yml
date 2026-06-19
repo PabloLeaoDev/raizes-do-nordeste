@@ -1,11 +1,11 @@
 services:
   postgres:
     image: postgres:15
-    container_name: raizes-db
+    container_name: raizes-do-nordeste-dev
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: raizes
+      POSTGRES_DB: raizes-db
     ports:
       - "5432:5432"

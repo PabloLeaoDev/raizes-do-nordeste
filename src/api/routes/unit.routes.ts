@@ -7,7 +7,7 @@ const controller = new UnitController();
 
 export const unitRoutes: FastifyPluginAsyncZod = async (app) => {
   app.get("/unidades", {
-    preHandler: [verifyJwt, verifyProfile(["ADMIN", "GERENTE"])],
+    preHandler: [verifyJwt, verifyProfile(["ADMIN"])],
     schema: {
       tags: ["Units"],
       security: [{ bearerAuth: [] }],
@@ -16,7 +16,7 @@ export const unitRoutes: FastifyPluginAsyncZod = async (app) => {
   });
 
   app.get("/unidades/:id", {
-    preHandler: [verifyJwt, verifyProfile(["ADMIN", "GERENTE"])],
+    preHandler: [verifyJwt, verifyProfile(["ADMIN"])],
     schema: {
       tags: ["Units"],
       security: [{ bearerAuth: [] }],

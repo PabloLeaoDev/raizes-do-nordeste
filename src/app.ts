@@ -55,7 +55,6 @@ app.get(prefix, async () => {
   };
 });
 
-app.register(authRoutes, { prefix });
-app.register(productRoutes, { prefix });
-app.register(orderRoutes, { prefix });
-app.register(unitRoutes, { prefix });
+const appRoutes = [authRoutes, unitRoutes, orderRoutes, productRoutes];
+
+for (let routes of appRoutes) app.register(routes, { prefix });

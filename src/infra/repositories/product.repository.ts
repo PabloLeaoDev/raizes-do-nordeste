@@ -8,10 +8,16 @@ export class ProductRepository {
     client: PoolClient | typeof pool = pool,
   ): Promise<Product> {
     const result = await client.query(
-      `INSERT INTO produto (nome, descricao, preco, estoque_total)
-       VALUES ($1, $2, $3, $4)
+      `INSERT INTO produto (nome, descricao, preco, estoque_total, unidade_id)
+       VALUES ($1, $2, $3, $4, $5)
        RETURNING *`,
-      [data.nome, data.descricao ?? "", data.preco, data.estoque_total ?? 0],
+      [
+        data.nome,
+        data.descricao ?? "",
+        data.preco,
+        data.estoque_total ?? 0,
+        data.unidade_id ?? "",
+      ],
     );
     return result.rows[0];
   }
@@ -23,6 +29,7 @@ export class ProductRepository {
       descricao?: string;
       preco?: number;
       estoque_total?: number;
+      unidade_id?: string;
     },
   ): Promise<Product> {
     let productResult = {} as QueryResult<Product>,

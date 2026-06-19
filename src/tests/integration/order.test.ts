@@ -6,13 +6,11 @@ jest.mock("../../infra/providers/payment-mock.provider", () => {
   return {
     PaymentMockProvider: jest.fn().mockImplementation(() => {
       return {
-        processPayment: jest
-          .fn()
-          .mockResolvedValue({
-            success: true,
-            transactionId: "TXN-123",
-            timestamp: new Date(),
-          }),
+        processPayment: jest.fn().mockResolvedValue({
+          success: true,
+          transactionId: "TXN-123",
+          timestamp: new Date(),
+        }),
       };
     }),
   };
@@ -53,9 +51,15 @@ describe("Order Routes", () => {
     );
     unidadeId = unidadeRes.rows[0].id;
 
+    const unitRes = await pool.query(
+      "SELECT id FROM unidade WHERE nome = 'Teste Unidade'",
+    );
+    const { id: unitId } = unitRes.rows[0];
+
     // Create Produto
     const produtoRes = await pool.query(
-      `INSERT INTO produto (nome, preco, estoque_total) VALUES ('Teste Produto', 10.00, 100) RETURNING id`,
+      `INSERT INTO produto (nome, preco, estoque_total, unidade_id) VALUES ('Teste Produto', 10.00, 100, $1) RETURNING id`,
+      [unitId],
     );
     produtoId = produtoRes.rows[0].id;
   });

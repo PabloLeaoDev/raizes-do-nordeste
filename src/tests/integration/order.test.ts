@@ -1,4 +1,4 @@
-import { app } from "../../app";
+import { app, prefix } from "../../app";
 import pool from "../../infra/db/database";
 import * as bcrypt from "bcrypt";
 
@@ -17,11 +17,13 @@ jest.mock("../../infra/providers/payment-mock.provider", () => {
 });
 
 describe("Order Routes", () => {
-  let token: string;
-  let userId: string;
-  let unidadeId: string;
-  let produtoId: string;
-  let pedidoId: string;
+  let [
+    token,
+    userId,
+    unidadeId,
+    produtoId,
+    pedidoId
+  ]: string[] = [];
 
   beforeAll(async () => {
     await app.ready();
@@ -40,7 +42,7 @@ describe("Order Routes", () => {
     // Login to get token
     const loginRes = await app.inject({
       method: "POST",
-      url: "/auth/login",
+      url: `${prefix}/auth/login`,
       payload: { email: "admin@teste.com", senha: "admin123" },
     });
     token = loginRes.json().token;
@@ -72,10 +74,10 @@ describe("Order Routes", () => {
     await app.close();
   });
 
-  test("POST /pedidos should create an order and return 201", async () => {
+  test("POST /api/v1/pedidos should create an order and return 201", async () => {
     const response = await app.inject({
       method: "POST",
-      url: "/pedidos",
+      url: `${prefix}/pedidos`,
       headers: { Authorization: `Bearer ${token}` },
       payload: {
         unidade_id: unidadeId,
@@ -84,37 +86,40 @@ describe("Order Routes", () => {
       },
     });
 
-    expect(response.statusCode).toBe(201);
     const body = response.json();
+
+    expect(response.statusCode).toBe(201);
     expect(body).toHaveProperty("id");
     pedidoId = body.id;
   });
 
-  test("GET /pedidos should list orders and return 200", async () => {
+  test("GET /api/v1/pedidos should list orders and return 200", async () => {
     const response = await app.inject({
       method: "GET",
-      url: "/pedidos",
+      url: `${prefix}/pedidos`,
       headers: { Authorization: `Bearer ${token}` },
     });
 
-    expect(response.statusCode).toBe(200);
     const body = response.json();
+
+    expect(response.statusCode).toBe(200);
     expect(Array.isArray(body)).toBe(true);
     expect(body.length).toBeGreaterThanOrEqual(1);
   });
 
-  test("PATCH /pedidos/:id/status should update order status and return 200", async () => {
+  test("PATCH /api/v1/pedidos/:id/status should update order status and return 200", async () => {
     const response = await app.inject({
       method: "PATCH",
-      url: `/pedidos/${pedidoId}/status`,
+      url: `${prefix}/pedidos/${pedidoId}/status`,
       headers: { Authorization: `Bearer ${token}` },
       payload: {
         status: "EM_PREPARACAO",
       },
     });
 
-    expect(response.statusCode).toBe(200);
     const body = response.json();
+
+    expect(response.statusCode).toBe(200);
     expect(body).toHaveProperty("id", pedidoId);
     expect(body).toHaveProperty("status", "EM_PREPARACAO");
   });

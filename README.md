@@ -40,7 +40,7 @@ cp .env.example .env
 
 ```env
 # Backend
-APP_HOST=http://localhost
+APP_HOST=http://localhost/api/v1
 
 DB_HOST=localhost
 DB_PORT=5432
@@ -66,7 +66,7 @@ Isso irá:
 
 ### 5. URL da aplicação
 
-- **Backend API:** http://localhost:{PORT}
+- **Backend API:** http://localhost:{PORT}/api/v1
 
 ## 🧪 Testes
 

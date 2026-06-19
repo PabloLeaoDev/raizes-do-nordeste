@@ -7,10 +7,7 @@ async function seed() {
     console.log("Iniciando seed...");
     await client.query("BEGIN");
 
-    // Senha hash para 'admin123'
     const passwordHash = await bcrypt.hash("admin123", 10);
-
-    // Inserir Admin
     const adminRes = await client.query(
       `
       INSERT INTO usuario (nome, email, senha_hash, perfil)
@@ -27,7 +24,6 @@ async function seed() {
       console.log("Admin já existente.");
     }
 
-    // Inserir Unidades
     await client.query(`
       INSERT INTO unidade (nome, endereco) VALUES 
       ('Raízes - Centro', 'Rua Central, 123'),
@@ -35,13 +31,18 @@ async function seed() {
     `);
     console.log("Unidades inseridas.");
 
-    // Inserir Produtos
-    await client.query(`
-      INSERT INTO produto (nome, descricao, preco, estoque_total) VALUES 
-      ('Tapioca de Carne de Sol', 'Deliciosa tapioca recheada com carne de sol', 15.90, 100),
-      ('Cuscuz com Queijo', 'Clássico cuscuz nordestino com queijo coalho', 12.50, 50),
-      ('Bolo de Rolo', 'Autêntico bolo de rolo pernambucano', 8.00, 20)
-    `);
+    const unitRes = await client.query(`SELECT id FROM unidade`);
+    const unitIds = unitRes.rows.map((row) => row.id as string);
+
+    await client.query(
+      `
+      INSERT INTO produto (nome, descricao, preco, estoque_total, unidade_id) VALUES 
+      ('Tapioca de Carne de Sol', 'Deliciosa tapioca recheada com carne de sol', 15.90, 100, $1),
+      ('Cuscuz com Queijo', 'Clássico cuscuz nordestino com queijo coalho', 12.50, 50, $2),
+      ('Bolo de Rolo', 'Autêntico bolo de rolo pernambucano', 8.00, 20, $3)
+    `,
+      [unitIds[0], unitIds[1], unitIds[0]],
+    );
     console.log("Produtos inseridos.");
 
     await client.query("COMMIT");

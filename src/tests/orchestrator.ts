@@ -3,10 +3,12 @@ import retry from "async-retry";
 async function waitForAllServices() {
   const fetchStatusPage = async () => {
     try {
-      const response = await fetch(
-        `${process.env.HOST || "http://localhost"}:${process.env.PORT || 3000}/`,
-      );
+      const appUrl = `${process.env.APP_HOST || "http://localhost"}:${process.env.PORT || 3000}/`,
+        response = await fetch(appUrl);
+
       if (!response.ok) throw Error(`HTTP Error ${response.status}`);
+
+      console.log("Server running: ", appUrl);
       await response.json();
     } catch (err) {
       console.error(err);

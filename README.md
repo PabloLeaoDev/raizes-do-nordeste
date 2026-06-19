@@ -8,6 +8,7 @@ API de gestão de vendas e estoque da rede de lanchonetes Raízes do Nordeste.
 - **Fastify** - Framework web de alta performance
 - **Zod** - Validação de schemas
 - **pg** - Cliente do PostgreSQL
+- **node-pg-migrate** - Migrações do dados
 - **bcrypt** - Criptografia de senhas
 - **jsonwebtoken** - Autenticação JWT
 - **jest** - Testes unitários
@@ -39,22 +40,23 @@ cp .env.example .env
 
 ```env
 # Backend
-HOST=localhost
-PORT=3000
+APP_HOST=http://localhost
 
-DB_HOST=database
+DB_HOST=localhost
 DB_PORT=5432
-DB_NAME=raizes-do-nordeste-dev
 DB_USER=postgres
-DB_PASS=postgres
+DB_PASSWORD=postgres
+DB_NAME=raizes-do-nordeste-dev
 
-JWT_SECRET=your-secret-key-here
+DATABASE_URL=postgres://postgres:postgres@localhost:5432/raizes-do-nordeste-dev
+
+JWT_SECRET=supersecret
 ```
 
-### 4. Inicie os serviços
+### 4. Inicie a infra e o servidor
 
 ```bash
-docker compose up -d
+npm run init
 ```
 
 Isso irá:
@@ -62,86 +64,34 @@ Isso irá:
 1. Criar e iniciar o banco de dados PostgreSQL
 2. Criar e iniciar o backend Node.js
 
-### 5. Acesse as aplicações
+### 5. URL da aplicação
 
-- **Backend API:** http://localhost:3000
-
-### 6. Crie um usuário admin (opcional)
-
-Para criar um usuário admin, você precisa primeiro popular o banco. Você pode fazer isso:
-
-1. **Usando um script** (veja a seção abaixo)
-2. **Criando manualmente** através da API (depois que o backend estiver rodando)
-
-### 7. Para parar os serviços
-
-```bash
-docker compose down
-```
-
-## 📝 Criando Usuário Admin com Script
-
-### 1. Entre no container do backend
-
-```bash
-docker exec -it raizes-do-nordeste-backend bash
-```
-
-### 2. Execute o script de seed
-
-```bash
-npx ts-node src/infra/database/scripts/seed.ts
-```
-
-### 3. Saia do container
-
-```bash
-exit
-```
-
-Agora você pode fazer login com o usuário admin:
-
-- **Email:** [EMAIL_ADDRESS]`
-- **Senha:** `admin123`
+- **Backend API:** http://localhost:{PORT}
 
 ## 🧪 Testes
 
-### Testes de Integração
-
-Para rodar os testes de integração:
-
-```bash
-./node_modules/.bin/jest --config jest.config.js --runInBand
-```
-
-ou se tiver criado um script no `package.json`:
+Para rodar os testes (certifique-se que a aplicação está rodando):
 
 ```bash
 npm test
-```
-
-### Testes Unitários
-
-```bash
-npm run test:unit
 ```
 
 ## 🔐 Endpoints Principais
 
 ### Autenticação
 
-- `POST /auth/register` - Registrar usuário
+- `POST /auth/signup` - Registrar usuário
 - `POST /auth/login` - Login de usuário
 
 ### Produtos
 
 - `POST /produtos` - Criar produto (ADMIN, GERENTE)
 - `GET /produtos` - Listar produtos (TODOS)
-- `GET /produtos/:id` - Buscar produto por ID (TODOS)
-- `PATCH /produtos/:id` - Atualizar produto (ADMIN, GERENTE)
+- `GET /produtos/:id` - Buscar produto por ID (TODOS) (a implementar)
+- `PUT /produtos/:id` - Atualizar produto (ADMIN, GERENTE)
 - `DELETE /produtos/:id` - Deletar produto (ADMIN)
 
-### Usuários
+### Usuários (a implementar)
 
 - `GET /usuarios` - Listar usuários (ADMIN, GERENTE)
 - `GET /usuarios/:id` - Buscar usuário por ID (ADMIN, GERENTE)
@@ -152,6 +102,14 @@ npm run test:unit
 - `POST /pedidos` - Criar pedido (TODOS)
 - `GET /pedidos` - Listar pedidos (ADMIN, GERENTE, ATENDENTE)
 - `PATCH /pedidos/:id/status` - Atualizar status do pedido (ADMIN, GERENTE, ATENDENTE)
+
+### Unidades
+
+- GET `/unidades` - Listar unidade (ADMIN)
+- GET `/unidades/:id` - Buscar unidade por ID (ADMIN)
+- POST `/unidades` - Criar Unidade (ADMIN)
+- PUT `/unidades/:id` - Atualizar Unidade (ADMIN)
+- DELETE `/unidades/:id` - Deletar Unidade (ADMIN)
 
 ## 📂 Estrutura do Projeto
 

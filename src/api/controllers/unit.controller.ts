@@ -1,55 +1,93 @@
 import { UnitService } from "../../services/unit.service";
 import { FastifyRequest, FastifyReply } from "fastify";
-
-const service = new UnitService();
-
 export class UnitController {
-  async create(req: FastifyRequest | any, reply: FastifyReply) {
-    const result = await service.createUnit(req.body);
+  private service = new UnitService();
 
-    return reply.code(201).send(result);
+  async getUnitProduct(req: FastifyRequest | any, reply: FastifyReply) {
+    const { productId } = req.params;
+    return await (productId
+      ? this.findUnitProductById(req, reply)
+      : this.listUnitProducts(req, reply));
+  }
+
+  async create(req: FastifyRequest | any, reply: FastifyReply) {
+    try {
+      const result = await this.service.createUnit(req.body);
+      return reply.code(201).send(result);
+    } catch (error) {
+      return reply.code(400).send({ message: (error as Error).message });
+    }
   }
 
   async update(req: FastifyRequest | any, reply: FastifyReply) {
-    const unit = await service.findById(req.params.id);
+    try {
+      const unit = await this.service.findById(req.params.id);
 
-    if (!unit) {
-      throw new Error("Unidade não encontrada");
-    } else if (!req.body.nome && !req.body.endereco) {
-      throw new Error("Dados inválidos para atualizar");
-    } else if (
-      req.body.nome === unit.nome &&
-      req.body.endereco === unit.endereco
-    ) {
-      throw new Error("Unidade já atualizada");
+      if (!unit) {
+        throw new Error("Unidade não encontrada");
+      } else if (!req.body.nome && !req.body.endereco) {
+        throw new Error("Dados inválidos para atualizar");
+      } else if (
+        req.body.nome === unit.nome &&
+        req.body.endereco === unit.endereco
+      ) {
+        throw new Error("Unidade já atualizada");
+      }
+
+      const result = await this.service.updateUnit(req.params.id, req.body);
+      return reply.code(200).send(result);
+    } catch (error) {
+      return reply.code(400).send({ message: (error as Error).message });
     }
-
-    const result = await service.updateUnit(req.params.id, req.body);
-
-    return reply.code(200).send(result);
   }
 
   async delete(req: FastifyRequest | any, reply: FastifyReply) {
-    const unit = await service.findById(req.params.id);
-
-    if (!unit) {
-      throw new Error("Unidade não encontrada");
+    try {
+      const unit = await this.service.findById(req.params.id);
+      if (!unit) throw new Error("Unidade não encontrada");
+      const result = await this.service.deleteUnit(req.params.id);
+      return reply.code(200).send(result);
+    } catch (error) {
+      return reply.code(400).send({ message: (error as Error).message });
     }
-
-    const result = await service.deleteUnit(req.params.id);
-
-    return reply.code(200).send(result);
   }
 
   async list(req: FastifyRequest | any, reply: FastifyReply) {
-    const result = await service.list();
+    try {
+      const result = await this.service.list();
+      return reply.code(200).send(result);
+    } catch (error) {
+      return reply.code(400).send({ message: (error as Error).message });
+    }
+  }
 
-    return reply.code(200).send(result);
+  async listUnitProducts(req: FastifyRequest | any, reply: FastifyReply) {
+    try {
+      const { unitId } = req.params;
+      const result = await this.service.listUnitProducts(unitId);
+
+      return reply.code(200).send(result);
+    } catch (error) {
+      return reply.code(400).send({ message: (error as Error).message });
+    }
   }
 
   async findById(req: FastifyRequest | any, reply: FastifyReply) {
-    const result = (await service.findById(req.params.id)) || null;
+    try {
+      const result = (await this.service.findById(req.params.id)) || null;
+      return reply.code(200).send(result);
+    } catch (error) {
+      return reply.code(400).send({ message: (error as Error).message });
+    }
+  }
 
-    return reply.code(200).send(result);
+  async findUnitProductById(req: FastifyRequest | any, reply: FastifyReply) {
+    try {
+      const { unitId, productId } = req.params;
+      const result = await this.service.findUnitProductById(unitId, productId);
+      return reply.code(200).send(result);
+    } catch (error) {
+      return reply.code(400).send({ message: (error as Error).message });
+    }
   }
 }

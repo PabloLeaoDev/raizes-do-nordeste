@@ -1,5 +1,5 @@
 import pool from "../db/database";
-import { Unit } from "../../domain/entities";
+import { Product, Unit } from "../../domain/entities";
 import { QueryResult } from "pg";
 
 export class UnitRepository {
@@ -56,8 +56,27 @@ export class UnitRepository {
     return result.rows[0];
   }
 
+  async findUnitProductById(
+    unitId: string,
+    productId: string,
+  ): Promise<Product | undefined> {
+    const result = await pool.query(
+      "SELECT * FROM produto WHERE id = $1 AND unidade_id = $2",
+      [productId, unitId],
+    );
+    return result.rows[0];
+  }
+
   async findAll(): Promise<Unit[]> {
     const result = await pool.query("SELECT * FROM unidade ORDER BY nome DESC");
+    return result.rows;
+  }
+
+  async listUnitProducts(id: string): Promise<Product[] | undefined> {
+    const result = await pool.query(
+      "SELECT * FROM produto WHERE unidade_id = $1",
+      [id],
+    );
     return result.rows;
   }
 }

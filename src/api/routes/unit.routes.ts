@@ -24,6 +24,15 @@ export const unitRoutes: FastifyPluginAsyncZod = async (app) => {
     handler: controller.findById.bind(controller),
   });
 
+  app.get("/unidades/:unitId/produtos/:productId?", {
+    preHandler: [verifyJwt, verifyProfile(["ADMIN"])],
+    schema: {
+      tags: ["Units"],
+      security: [{ bearerAuth: [] }],
+    },
+    handler: controller.getUnitProduct.bind(controller),
+  });
+
   app.post("/unidades", {
     preHandler: [verifyJwt, verifyProfile(["ADMIN"])],
     schema: {

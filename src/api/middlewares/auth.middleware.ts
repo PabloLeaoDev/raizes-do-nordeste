@@ -5,7 +5,9 @@ export async function verifyJwt(request: FastifyRequest, reply: FastifyReply) {
   try {
     const authHeader = request.headers.authorization;
     if (!authHeader) {
-      throw new Error("Token não fornecido");
+      return reply.code(401).send({
+        error: "Token não fornecido",
+      });
     }
 
     const token = authHeader.replace("Bearer ", "");
@@ -13,7 +15,7 @@ export async function verifyJwt(request: FastifyRequest, reply: FastifyReply) {
 
     (request as any).user = decoded;
   } catch (err) {
-    reply.code(401).send({ error: "Não autorizado" });
+    return reply.code(401).send({ error: "Não autorizado" });
   }
 }
 
@@ -22,10 +24,10 @@ export function verifyProfile(allowedProfiles: string[]) {
     try {
       const user = (request as any).user;
       if (!user || !allowedProfiles.includes(user.perfil)) {
-        reply.code(403).send({ error: "Acesso negado" });
+        return reply.code(403).send({ error: "Acesso negado" });
       }
     } catch (err) {
-      reply.code(403).send({ error: "Acesso negado" });
+      return reply.code(403).send({ error: "Acesso negado" });
     }
   };
 }

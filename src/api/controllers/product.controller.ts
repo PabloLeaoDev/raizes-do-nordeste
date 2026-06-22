@@ -10,27 +10,28 @@ export class ProductController {
   }
 
   async update(req: FastifyRequest | any, reply: FastifyReply) {
-    const product = await service.findById(req.params.id);
+    const product = await service.findById(req.params.id),
+      productData = req.body;
 
     if (!product) {
       throw new Error("Produto não encontrado");
     } else if (
-      !req.body.nome &&
-      !req.body.preco &&
-      !req.body.descricao &&
-      !req.body.estoque_total
+      !productData.nome &&
+      !productData.preco &&
+      !productData.descricao &&
+      !productData.estoque_total
     ) {
       throw new Error("Dados inválidos para atualizar");
     } else if (
-      req.body.nome === product.nome &&
-      req.body.preco === product.preco &&
-      req.body.descricao === product.descricao &&
-      req.body.estoque_total === product.estoque_total
+      productData.nome === product.nome &&
+      productData.preco === product.preco &&
+      productData.descricao === product.descricao &&
+      productData.estoque_total === product.estoque_total
     ) {
       throw new Error("Produto já atualizado");
     }
 
-    const result = await service.updateProduct(req.params.id, req.body);
+    const result = await service.updateProduct(req.params.id, productData);
 
     return reply.code(200).send(result);
   }

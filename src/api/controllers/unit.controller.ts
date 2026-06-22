@@ -1,5 +1,6 @@
 import { UnitService } from "../../services/unit.service";
 import { FastifyRequest, FastifyReply } from "fastify";
+
 export class UnitController {
   private service = new UnitService();
 
@@ -21,15 +22,16 @@ export class UnitController {
 
   async update(req: FastifyRequest | any, reply: FastifyReply) {
     try {
-      const unit = await this.service.findById(req.params.id);
+      const unit = await this.service.findById(req.params.id),
+        unitData = req.body;
 
       if (!unit) {
         throw new Error("Unidade não encontrada");
-      } else if (!req.body.nome && !req.body.endereco) {
+      } else if (!unitData.nome && !unitData.endereco) {
         throw new Error("Dados inválidos para atualizar");
       } else if (
-        req.body.nome === unit.nome &&
-        req.body.endereco === unit.endereco
+        unitData.nome === unit.nome &&
+        unitData.endereco === unit.endereco
       ) {
         throw new Error("Unidade já atualizada");
       }

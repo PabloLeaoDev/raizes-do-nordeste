@@ -13,7 +13,7 @@ export class UserRepository {
 
   async findById(id: string): Promise<Omit<User, "senha_hash"> | undefined> {
     const result = await pool.query(
-      "SELECT id, nome, email, perfil, criado_em FROM usuario WHERE id = $1",
+      "SELECT id, nome, email, perfil, created_at FROM usuario WHERE id = $1",
       [id],
     );
     return result.rows[0];
@@ -21,7 +21,7 @@ export class UserRepository {
 
   async findAll(): Promise<User[]> {
     const result = await pool.query(
-      "SELECT id, nome, email, perfil, criado_em FROM usuario ORDER BY nome DESC",
+      "SELECT id, nome, email, perfil, created_at FROM usuario ORDER BY nome DESC",
     );
     return result.rows;
   }
@@ -39,7 +39,7 @@ export class UserRepository {
   }): Promise<Omit<User, "senha_hash">> {
     const result = await pool.query(
       `INSERT INTO usuario (nome, email, senha_hash, perfil)
-       VALUES ($1, $2, $3, $4) RETURNING id, nome, email, perfil, criado_em`,
+       VALUES ($1, $2, $3, $4) RETURNING id, nome, email, perfil, created_at`,
       [nome, email, senhaHash, perfil],
     );
     return result.rows[0];
@@ -68,8 +68,8 @@ export class UserRepository {
       }
     }
 
-    query += `WHERE id = $${queryCount} RETURNING id, nome, email, perfil, criado_em`;
-    query = query.replace(", WHERE", " WHERE");
+    query += "updated_at = NOW() ";
+    query += `WHERE id = $${queryCount} RETURNING id, nome, email, perfil, created_at`;
 
     userResult = await pool.query(query, [...queryValues, userData.id]);
 
@@ -78,7 +78,7 @@ export class UserRepository {
 
   async delete(id: string): Promise<User> {
     const userResult = await pool.query(
-      `DELETE FROM usuario WHERE id = $1 RETURNING id, nome, email, perfil, criado_em`,
+      `DELETE FROM usuario WHERE id = $1 RETURNING id, nome, email, perfil, created_at`,
       [id],
     );
 

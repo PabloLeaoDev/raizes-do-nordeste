@@ -48,8 +48,8 @@ export class ProductRepository {
       }
     }
 
+    query += "updated_at = NOW() ";
     query += `WHERE id = $${queryCount} RETURNING *`;
-    query = query.replace(", WHERE", " WHERE");
 
     productResult = await pool.query(query, [...queryValues, id]);
 

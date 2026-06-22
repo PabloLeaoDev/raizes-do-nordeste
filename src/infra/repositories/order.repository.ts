@@ -51,7 +51,7 @@ export class OrderRepository {
 
   async findAll(): Promise<Order[]> {
     const result = await pool.query(
-      "SELECT * FROM pedido ORDER BY data_criacao DESC",
+      "SELECT * FROM pedido ORDER BY created_at DESC",
     );
     return result.rows;
   }
@@ -61,7 +61,7 @@ export class OrderRepository {
     status: OrderStatus,
   ): Promise<Order | undefined> {
     const result = await pool.query(
-      "UPDATE pedido SET status = $1 WHERE id = $2 RETURNING *",
+      "UPDATE pedido SET status = $1, updated_at = NOW() WHERE id = $2 RETURNING *",
       [status, id],
     );
     return result.rows[0];

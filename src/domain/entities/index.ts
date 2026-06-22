@@ -7,14 +7,14 @@ export interface User {
   email: string;
   senha_hash: string;
   perfil: UserProfile;
-  criado_em: Date;
+  created_at: Date;
 }
 
 export interface Unit {
   id: string;
   nome: string;
   endereco: string;
-  criado_em: Date;
+  created_at: Date;
 }
 
 export interface Product {
@@ -23,7 +23,7 @@ export interface Product {
   descricao?: string;
   preco: number;
   estoque_total: number;
-  criado_em: Date;
+  created_at: Date;
 }
 
 export interface OrderItem {
@@ -41,6 +41,6 @@ export interface Order {
   status: OrderStatus;
   canal: OrderChannel;
   total: number;
-  data_criacao: Date;
+  created_at: Date;
   itens?: OrderItem[];
 }

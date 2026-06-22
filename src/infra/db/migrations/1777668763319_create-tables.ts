@@ -21,7 +21,7 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
     email: { type: "varchar(255)", notNull: true, unique: true },
     senha_hash: { type: "varchar(255)", notNull: true },
     perfil: { type: "perfil_usuario", notNull: true, default: "CLIENTE" },
-    criado_em: {
+    created_at: {
       type: "timestamp",
       notNull: true,
       default: pgm.func("current_timestamp"),
@@ -36,10 +36,14 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
     },
     nome: { type: "varchar(255)", notNull: true },
     endereco: { type: "text", notNull: true },
-    criado_em: {
+    created_at: {
       type: "timestamp",
       notNull: true,
       default: pgm.func("current_timestamp"),
+    },
+    updated_at: {
+      type: "timestamp",
+      notNull: false,
     },
   });
 
@@ -54,10 +58,14 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
     preco: { type: "numeric(10, 2)", notNull: true },
     estoque_total: { type: "integer", notNull: true, default: 0 },
     unidade_id: { type: "uuid", notNull: true, references: '"unidade"(id)' },
-    criado_em: {
+    created_at: {
       type: "timestamp",
       notNull: true,
       default: pgm.func("current_timestamp"),
+    },
+    updated_at: {
+      type: "timestamp",
+      notNull: false,
     },
   });
 
@@ -87,10 +95,14 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
     },
     canal: { type: "canal_pedido", notNull: true },
     total: { type: "numeric(10, 2)", notNull: true },
-    data_criacao: {
+    created_at: {
       type: "timestamp",
       notNull: true,
       default: pgm.func("current_timestamp"),
+    },
+    updated_at: {
+      type: "timestamp",
+      notNull: false,
     },
   });
 

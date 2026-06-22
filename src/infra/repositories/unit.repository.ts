@@ -32,8 +32,8 @@ export class UnitRepository {
       }
     }
 
+    query += "updated_at = NOW() ";
     query += `WHERE id = $${queryCount} RETURNING *`;
-    query = query.replace(", WHERE", " WHERE");
 
     unitResult = await pool.query(query, [...queryValues, id]);
 

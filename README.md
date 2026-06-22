@@ -2,7 +2,7 @@
 
 API de gestão de vendas e estoque da rede de lanchonetes Raízes do Nordeste.
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - **Node.js** - Ambiente de execução
 - **Fastify** - Framework web de alta performance
@@ -15,7 +15,7 @@ API de gestão de vendas e estoque da rede de lanchonetes Raízes do Nordeste.
 - **docker** e **docker-compose** - Containerização
 - **swagger** - Documentação da API
 
-## 🚀 Como Rodar com Docker
+## Como Rodar com Docker
 
 ### 1. Instale o Docker e Docker Compose
 
@@ -40,7 +40,7 @@ cp .env.example .env
 
 ```env
 # Backend
-APP_HOST=http://localhost/api/v1
+APP_HOST=http://localhost
 
 DB_HOST=localhost
 DB_PORT=5432
@@ -56,7 +56,7 @@ JWT_SECRET=supersecret
 ### 4. Inicie a infra e o servidor
 
 ```bash
-npm run init
+npm run start
 ```
 
 Isso irá:
@@ -68,7 +68,7 @@ Isso irá:
 
 - **Backend API:** http://localhost:{PORT}/api/v1
 
-## 🧪 Testes
+## Testes
 
 Para rodar os testes (certifique-se que a aplicação está rodando):
 
@@ -76,7 +76,7 @@ Para rodar os testes (certifique-se que a aplicação está rodando):
 npm test
 ```
 
-## 🔐 Endpoints Principais
+## Endpoints Principais
 
 ### Autenticação
 
@@ -91,11 +91,13 @@ npm test
 - `PUT /produtos/:id` - Atualizar produto (ADMIN, GERENTE)
 - `DELETE /produtos/:id` - Deletar produto (ADMIN)
 
-### Usuários (a implementar)
+### Usuários
 
 - `GET /usuarios` - Listar usuários (ADMIN, GERENTE)
 - `GET /usuarios/:id` - Buscar usuário por ID (ADMIN, GERENTE)
-- `PATCH /usuarios/:id` - Atualizar usuário (ADMIN, GERENTE)
+- `POST /usuarios` - Criar usuário (ADMIN)
+- `PATCH /usuarios/:id` - Atualizar usuário (ADMIN)
+- `DELETE /usuarios/:id` - Deletar usuário (ADMIN)
 
 ### Pedidos
 
@@ -105,13 +107,14 @@ npm test
 
 ### Unidades
 
-- GET `/unidades` - Listar unidade (ADMIN)
-- GET `/unidades/:id` - Buscar unidade por ID (ADMIN)
-- POST `/unidades` - Criar Unidade (ADMIN)
-- PUT `/unidades/:id` - Atualizar Unidade (ADMIN)
-- DELETE `/unidades/:id` - Deletar Unidade (ADMIN)
+- `GET /unidades` - Listar Unidade (ADMIN)
+- `GET /unidades/:id` - Buscar Unidade por ID (ADMIN)
+- `GET /unidades/:unitId/produtos/:productId?` - Buscar produtos ou produto por ID da Unidade (ADMIN)
+- `POST /unidades` - Criar Unidade (ADMIN)
+- `PUT /unidades/:id` - Atualizar Unidade (ADMIN)
+- `DELETE /unidades/:id` - Deletar Unidade (ADMIN)
 
-## 📂 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 raizes-do-nordeste/
@@ -122,16 +125,15 @@ raizes-do-nordeste/
 │   │   ├── schemas/          # Schemas de validação
 │   │   └── middlewares/      # Middlewares de autenticação
 │   ├── infra/
-│   │   ├── database/         # Configuração do banco de dados
+│   │   ├── db/               # Configuração do banco de dados
 │   │   ├── providers/        # Provedores de serviços externos
 │   │   ├── repositories/     # Repositórios de dados
-│   │   └── transaction/      # Gerenciamento de transações
+│   │   └── scripts/          # Gerenciamento de transações
 │   ├── domain/
 │   │   ├── entities/         # Entidades do domínio
-│   │   └── use-cases/        # Casos de uso da aplicação
+│   │   └── enums/            # Casos de uso da aplicação
 │   ├── services/             # Serviços da aplicação
 │   ├── tests/
-│   │   ├── unit/             # Testes unitários
 │   │   └── integration/      # Testes de integração
 │   ├── utils/                # Utilitários
 │   ├── server.ts             # Configuração do servidor
@@ -141,14 +143,14 @@ raizes-do-nordeste/
 ├── package-lock.json         # Dependências das dependências do projeto
 ├── .gitignore                # Arquivos ignorados pelo Git
 ├── swagger.json              # Documentação da API
-├── tsconfig.json              # Configuração do TypeScript
+├── tsconfig.json             # Configuração do TypeScript
 ├── docker-compose.yml        # Configuração do Docker
 ├── .env.example              # Exemplo de arquivo de ambiente
 ├── README.md                 # Informações do projeto
 └── LICENSE                   # Licença do projeto
 ```
 
-## 🤝 Contribuindo
+## Contribuindo
 
 1. Faça um fork do projeto
 2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
@@ -156,6 +158,6 @@ raizes-do-nordeste/
 4. Push para a branch (`git push origin feature/AmazingFeature`)
 5. Abra um Pull Request
 
-## 📝 Licença
+## Licença
 
 Este projeto é de código aberto e licenciado sob a licença MIT.

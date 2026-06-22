@@ -1,5 +1,5 @@
-import pool from "../db/database";
-import { Product, Unit } from "../../domain/entities";
+import pool from "@src/infra/db/database";
+import { Product, Unit } from "@src/domain/entities";
 import { QueryResult } from "pg";
 
 export class UnitRepository {

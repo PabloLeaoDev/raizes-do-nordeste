@@ -1,5 +1,5 @@
 import retry from "async-retry";
-import { prefix } from "../app";
+import { prefix } from "@src/app";
 
 async function waitForAllServices() {
   const fetchStatusPage = async () => {

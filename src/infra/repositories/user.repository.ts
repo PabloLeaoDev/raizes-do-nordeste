@@ -1,5 +1,5 @@
-import pool from "../db/database";
-import { User, UserProfile } from "../../domain/entities";
+import pool from "@src/infra/db/database";
+import { User, UserProfile } from "@src/domain/entities";
 import { QueryResult } from "pg";
 
 export class UserRepository {

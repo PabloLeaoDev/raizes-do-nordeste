@@ -1,4 +1,4 @@
-import { UnitService } from "../../services/unit.service";
+import { UnitService } from "@src/services/unit.service";
 import { FastifyRequest, FastifyReply } from "fastify";
 
 export class UnitController {

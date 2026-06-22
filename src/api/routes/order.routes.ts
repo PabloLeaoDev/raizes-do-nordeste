@@ -1,9 +1,9 @@
-import { OrderController } from "../controllers/order.controller";
+import { OrderController } from "@src/api/controllers/order.controller";
 import {
   createOrderSchema,
   updateOrderStatusSchema,
-} from "../schemas/order.schema";
-import { verifyJwt, verifyProfile } from "../middlewares/auth.middleware";
+} from "@src/api/schemas/order.schema";
+import { verifyJwt, verifyProfile } from "@src/api/middlewares/auth.middleware";
 import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
 

@@ -1,5 +1,5 @@
-import { ProductRepository } from "../infra/repositories/product.repository";
-import { Product } from "../domain/entities";
+import { ProductRepository } from "@src/infra/repositories/product.repository";
+import { Product } from "@src/domain/entities";
 
 export class ProductService {
   private repo = new ProductRepository();

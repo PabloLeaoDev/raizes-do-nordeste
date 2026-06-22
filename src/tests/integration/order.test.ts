@@ -1,5 +1,5 @@
-import { app, prefix } from "../../app";
-import pool from "../../infra/db/database";
+import { app, prefix } from "@src/app";
+import pool from "@src/infra/db/database";
 import * as bcrypt from "bcrypt";
 
 jest.mock("../../infra/providers/payment-mock.provider", () => {
@@ -17,13 +17,7 @@ jest.mock("../../infra/providers/payment-mock.provider", () => {
 });
 
 describe("Order Routes", () => {
-  let [
-    token,
-    userId,
-    unidadeId,
-    produtoId,
-    pedidoId
-  ]: string[] = [];
+  let [token, userId, unidadeId, produtoId, pedidoId]: string[] = [];
 
   beforeAll(async () => {
     await app.ready();

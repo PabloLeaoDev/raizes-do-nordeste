@@ -1,6 +1,9 @@
-import { UnitController } from "../controllers/unit.controller";
-import { createUnitSchema, updateUnitSchema } from "../schemas/unit.schema";
-import { verifyJwt, verifyProfile } from "../middlewares/auth.middleware";
+import { UnitController } from "@src/api/controllers/unit.controller";
+import {
+  createUnitSchema,
+  updateUnitSchema,
+} from "@src/api/schemas/unit.schema";
+import { verifyJwt, verifyProfile } from "@src/api/middlewares/auth.middleware";
 import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 
 const controller = new UnitController();

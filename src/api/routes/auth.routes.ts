@@ -1,5 +1,5 @@
-import { AuthController } from "../controllers/auth.controller";
-import { loginSchema, signupSchema } from "../schemas/auth.schema";
+import { AuthController } from "@src/api/controllers/auth.controller";
+import { loginSchema, signupSchema } from "@src/api/schemas/auth.schema";
 import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 
 const controller = new AuthController();

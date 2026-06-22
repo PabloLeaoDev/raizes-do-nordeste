@@ -1,5 +1,5 @@
-import pool from "../db/database";
-import { Order, OrderItem, OrderStatus } from "../../domain/entities";
+import pool from "@src/infra/db/database";
+import { Order, OrderItem, OrderStatus } from "@src/domain/entities";
 import { PoolClient } from "pg";
 
 export class OrderRepository {

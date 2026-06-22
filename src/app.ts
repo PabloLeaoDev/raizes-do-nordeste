@@ -7,11 +7,11 @@ import {
 } from "fastify-type-provider-zod";
 import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUI from "@fastify/swagger-ui";
-import { authRoutes } from "./api/routes/auth.routes";
-import { productRoutes } from "./api/routes/product.routes";
-import { orderRoutes } from "./api/routes/order.routes";
-import { unitRoutes } from "./api/routes/unit.routes";
-import { userRoutes } from "./api/routes/user.routes";
+import { authRoutes } from "@src/api/routes/auth.routes";
+import { productRoutes } from "@src/api/routes/product.routes";
+import { orderRoutes } from "@src/api/routes/order.routes";
+import { unitRoutes } from "@src/api/routes/unit.routes";
+import { userRoutes } from "@src/api/routes/user.routes";
 
 export const app = Fastify({
   logger: true,

@@ -1,4 +1,4 @@
-import { ProductService } from "../../services/product.service";
+import { ProductService } from "@src/services/product.service";
 import { FastifyRequest, FastifyReply } from "fastify";
 
 const service = new ProductService();

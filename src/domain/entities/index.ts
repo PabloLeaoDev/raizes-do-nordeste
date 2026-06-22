@@ -1,4 +1,4 @@
-import { UserProfile, OrderStatus, OrderChannel } from "../enums";
+import { UserProfile, OrderStatus, OrderChannel } from "@src/domain/enums";
 export { UserProfile, OrderStatus, OrderChannel };
 
 export interface User {

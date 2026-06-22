@@ -1,6 +1,9 @@
-import { UserController } from "../controllers/user.controller";
-import { createUserSchema, updateUserSchema } from "../schemas/user.schema";
-import { verifyJwt, verifyProfile } from "../middlewares/auth.middleware";
+import { UserController } from "@src/api/controllers/user.controller";
+import {
+  createUserSchema,
+  updateUserSchema,
+} from "@src/api/schemas/user.schema";
+import { verifyJwt, verifyProfile } from "@src/api/middlewares/auth.middleware";
 import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 
 const controller = new UserController();

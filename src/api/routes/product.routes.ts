@@ -1,9 +1,9 @@
-import { ProductController } from "../controllers/product.controller";
+import { ProductController } from "@src/api/controllers/product.controller";
 import {
   createProductSchema,
   updateProductSchema,
-} from "../schemas/product.schema";
-import { verifyJwt, verifyProfile } from "../middlewares/auth.middleware";
+} from "@src/api/schemas/product.schema";
+import { verifyJwt, verifyProfile } from "@src/api/middlewares/auth.middleware";
 import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 
 const controller = new ProductController();

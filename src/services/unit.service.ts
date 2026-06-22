@@ -1,5 +1,5 @@
-import { UnitRepository } from "../infra/repositories/unit.repository";
-import { isUuid, validator } from "../utils/validators";
+import { UnitRepository } from "@src/infra/repositories/unit.repository";
+import { isUuid, validator } from "@src/utils/validators";
 
 export class UnitService {
   private unitRepo = new UnitRepository();

@@ -1,4 +1,4 @@
-import { OrderService } from "../../services/order.service";
+import { OrderService } from "@src/services/order.service";
 import { FastifyRequest, FastifyReply } from "fastify";
 
 const service = new OrderService();

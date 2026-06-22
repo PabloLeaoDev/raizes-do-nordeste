@@ -1,7 +1,7 @@
-import { AuthService } from "../../services/auth.service";
+import { AuthService } from "@src/services/auth.service";
 import { FastifyRequest, FastifyReply } from "fastify";
 import { z } from "zod";
-import { loginSchema, signupSchema } from "../schemas/auth.schema";
+import { loginSchema, signupSchema } from "@src/api/schemas/auth.schema";
 
 const service = new AuthService();
 

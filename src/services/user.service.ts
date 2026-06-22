@@ -1,6 +1,6 @@
-import { UserRepository } from "../infra/repositories/user.repository";
-import { isUuid, validator } from "../utils/validators";
-import { UserProfile } from "../domain/enums";
+import { UserRepository } from "@src/infra/repositories/user.repository";
+import { isUuid, validator } from "@src/utils/validators";
+import { UserProfile } from "@src/domain/enums";
 import bcrypt from "bcrypt";
 
 export class UserService {

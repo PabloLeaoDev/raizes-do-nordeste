@@ -1,8 +1,8 @@
-import pool from "../infra/db/database";
-import { ProductRepository } from "../infra/repositories/product.repository";
-import { OrderRepository } from "../infra/repositories/order.repository";
-import { PaymentMockProvider } from "../infra/providers/payment-mock.provider";
-import { OrderStatus, UserProfile } from "../domain/entities";
+import pool from "@src/infra/db/database";
+import { ProductRepository } from "@src/infra/repositories/product.repository";
+import { OrderRepository } from "@src/infra/repositories/order.repository";
+import { PaymentMockProvider } from "@src/infra/providers/payment-mock.provider";
+import { OrderStatus, UserProfile } from "@src/domain/entities";
 
 export class OrderService {
   private productRepo = new ProductRepository();

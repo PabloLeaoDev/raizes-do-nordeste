@@ -11,6 +11,7 @@ import { authRoutes } from "./api/routes/auth.routes";
 import { productRoutes } from "./api/routes/product.routes";
 import { orderRoutes } from "./api/routes/order.routes";
 import { unitRoutes } from "./api/routes/unit.routes";
+import { userRoutes } from "./api/routes/user.routes";
 
 export const app = Fastify({
   logger: true,
@@ -55,6 +56,12 @@ app.get(prefix, async () => {
   };
 });
 
-const appRoutes = [authRoutes, unitRoutes, orderRoutes, productRoutes];
+const appRoutes = [
+  authRoutes,
+  unitRoutes,
+  orderRoutes,
+  productRoutes,
+  userRoutes,
+];
 
 for (let routes of appRoutes) app.register(routes, { prefix });

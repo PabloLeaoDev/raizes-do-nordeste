@@ -56,7 +56,7 @@ JWT_SECRET=supersecret
 ### 4. Inicie a infra e o servidor
 
 ```bash
-npm run start
+npm start
 ```
 
 Isso irá:

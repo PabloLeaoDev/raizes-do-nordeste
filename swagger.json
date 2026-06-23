@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000",
+      "url": "http://localhost:3000/api/v1",
       "description": "Servidor local de desenvolvimento"
     }
   ],
@@ -127,7 +127,7 @@
           },
           "preco": {
             "type": "number",
-            "exclusiveMinimum": false
+            "minimum": 1
           },
           "estoque_total": {
             "type": "integer",
@@ -160,7 +160,7 @@
           },
           "preco": {
             "type": "number",
-            "exclusiveMinimum": false
+            "minimum": 1
           },
           "estoque_total": {
             "type": "integer",
@@ -181,7 +181,7 @@
           },
           "preco": {
             "type": "number",
-            "exclusiveMinimum": false
+            "minimum": 1
           },
           "estoque_total": {
             "type": "integer",
@@ -202,7 +202,7 @@
           },
           "quantidade": {
             "type": "integer",
-            "exclusiveMinimum": false
+            "minimum": 1
           }
         }
       },
@@ -1010,7 +1010,7 @@
         }
       }
     },
-    "/usuários": {
+    "/usuarios": {
       "get": {
         "tags": [
           "Users"

@@ -87,7 +87,7 @@ npm test
 
 - `POST /produtos` - Criar produto (ADMIN, GERENTE)
 - `GET /produtos` - Listar produtos (TODOS)
-- `GET /produtos/:id` - Buscar produto por ID (TODOS) (a implementar)
+- `GET /produtos/:id` - Buscar produto por ID (TODOS)
 - `PUT /produtos/:id` - Atualizar produto (ADMIN, GERENTE)
 - `DELETE /produtos/:id` - Deletar produto (ADMIN)
 

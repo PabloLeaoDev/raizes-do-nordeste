@@ -16,7 +16,7 @@ export class UnitController {
       const result = await this.service.createUnit(req.body);
       return reply.code(201).send(result);
     } catch (error) {
-      return reply.code(400).send({ message: (error as Error).message });
+      return reply.code(400).send({ error: (error as Error).message });
     }
   }
 
@@ -39,7 +39,7 @@ export class UnitController {
       const result = await this.service.updateUnit(req.params.id, req.body);
       return reply.code(200).send(result);
     } catch (error) {
-      return reply.code(400).send({ message: (error as Error).message });
+      return reply.code(400).send({ error: (error as Error).message });
     }
   }
 
@@ -50,7 +50,7 @@ export class UnitController {
       const result = await this.service.deleteUnit(req.params.id);
       return reply.code(200).send(result);
     } catch (error) {
-      return reply.code(400).send({ message: (error as Error).message });
+      return reply.code(400).send({ error: (error as Error).message });
     }
   }
 
@@ -59,7 +59,7 @@ export class UnitController {
       const result = await this.service.list();
       return reply.code(200).send(result);
     } catch (error) {
-      return reply.code(400).send({ message: (error as Error).message });
+      return reply.code(400).send({ error: (error as Error).message });
     }
   }
 
@@ -70,7 +70,7 @@ export class UnitController {
 
       return reply.code(200).send(result);
     } catch (error) {
-      return reply.code(400).send({ message: (error as Error).message });
+      return reply.code(400).send({ error: (error as Error).message });
     }
   }
 
@@ -79,7 +79,7 @@ export class UnitController {
       const result = (await this.service.findById(req.params.id)) || null;
       return reply.code(200).send(result);
     } catch (error) {
-      return reply.code(400).send({ message: (error as Error).message });
+      return reply.code(400).send({ error: (error as Error).message });
     }
   }
 
@@ -89,7 +89,7 @@ export class UnitController {
       const result = await this.service.findUnitProductById(unitId, productId);
       return reply.code(200).send(result);
     } catch (error) {
-      return reply.code(400).send({ message: (error as Error).message });
+      return reply.code(400).send({ error: (error as Error).message });
     }
   }
 }

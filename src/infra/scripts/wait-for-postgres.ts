@@ -11,7 +11,10 @@ function checkPostgres() {
     console.log("\n🟢 Postgres is ready and accepting connections!");
   };
 
-  exec("docker exec raizes-do-nordeste-dev pg_isready --host localhost", handleReturn);
+  exec(
+    "docker exec raizes-do-nordeste-dev pg_isready --host localhost",
+    handleReturn,
+  );
 }
 
 process.stdout.write("\n\n🔴 Waiting for Postgres to accept connections");

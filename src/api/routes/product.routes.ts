@@ -9,6 +9,30 @@ import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 const controller = new ProductController();
 
 export const productRoutes: FastifyPluginAsyncZod = async (app) => {
+  app.get("/produtos", {
+    preHandler: [
+      verifyJwt,
+      verifyProfile(["ADMIN", "GERENTE", "ATENDENTE", "CLIENTE"]),
+    ],
+    schema: {
+      tags: ["Products"],
+      security: [{ bearerAuth: [] }],
+    },
+    handler: controller.list.bind(controller),
+  });
+
+  app.get("/produtos/:id", {
+    preHandler: [
+      verifyJwt,
+      verifyProfile(["ADMIN", "GERENTE", "ATENDENTE", "CLIENTE"]),
+    ],
+    schema: {
+      tags: ["Products"],
+      security: [{ bearerAuth: [] }],
+    },
+    handler: controller.findById.bind(controller),
+  });
+
   app.post("/produtos", {
     preHandler: [verifyJwt, verifyProfile(["ADMIN", "GERENTE"])],
     schema: {
@@ -17,15 +41,6 @@ export const productRoutes: FastifyPluginAsyncZod = async (app) => {
       body: createProductSchema,
     },
     handler: controller.create.bind(controller),
-  });
-
-  app.get("/produtos", {
-    preHandler: [verifyJwt, verifyProfile(["ADMIN", "GERENTE"])],
-    schema: {
-      tags: ["Products"],
-      security: [{ bearerAuth: [] }],
-    },
-    handler: controller.list.bind(controller),
   });
 
   app.put("/produtos/:id", {

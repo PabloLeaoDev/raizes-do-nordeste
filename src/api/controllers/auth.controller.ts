@@ -10,19 +10,25 @@ export class AuthController {
     req: FastifyRequest<{ Body: z.infer<typeof loginSchema> }>,
     reply: FastifyReply,
   ) {
-    const { email, senha } = req.body;
-
-    const result = await service.login(email, senha);
-    return reply.send(result);
+    try {
+      const { email, senha } = req.body;
+      const result = await service.login(email, senha);
+      return reply.send(result);
+    } catch (error) {
+      return reply.code(401).send({ error: (error as Error).message });
+    }
   }
 
   async signup(
     req: FastifyRequest<{ Body: z.infer<typeof signupSchema> }>,
     reply: FastifyReply,
   ) {
-    const { nome, email, senha, perfil } = req.body;
-
-    const result = await service.signup(nome, email, senha, perfil);
-    return reply.send(result);
+    try {
+      const { nome, email, senha, perfil } = req.body;
+      const result = await service.signup(nome, email, senha, perfil);
+      return reply.send(result);
+    } catch (error) {
+      return reply.code(401).send({ error: (error as Error).message });
+    }
   }
 }

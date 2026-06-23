@@ -1,4 +1,5 @@
 import { FastifyRequest, FastifyReply } from "fastify";
+import { UserRepository } from "@src/infra/repositories/user.repository";
 import jwt from "jsonwebtoken";
 
 export async function verifyJwt(request: FastifyRequest, reply: FastifyReply) {
@@ -22,12 +23,24 @@ export async function verifyJwt(request: FastifyRequest, reply: FastifyReply) {
 export function verifyProfile(allowedProfiles: string[]) {
   return async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-      const user = (request as any).user;
-      if (!user || !allowedProfiles.includes(user.perfil)) {
-        return reply.code(403).send({ error: "Acesso negado" });
+      const user = (request as any).user,
+        error = "Acesso negado";
+
+      if (!user) {
+        return reply.code(403).send({ error });
+      }
+
+      const userExists = await new UserRepository().findById(user.id);
+
+      if (!userExists) {
+        return reply.code(403).send({ error });
+      }
+
+      if (!allowedProfiles.includes(userExists.perfil)) {
+        return reply.code(403).send({ error });
       }
     } catch (err) {
-      return reply.code(403).send({ error: "Acesso negado" });
+      return reply.code(403).send({ error: (err as Error).message });
     }
   };
 }

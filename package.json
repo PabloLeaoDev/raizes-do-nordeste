@@ -19,6 +19,7 @@
     "prestart": "npm run build",
     "poststart": "npm run services:down",
     "test": "jest",
+    "test:watch": "jest --watchAll --runInBand --verbose",
     "lint:prettier:check": "prettier --check .",
     "lint:prettier:fix": "prettier --write .",
     "postservices:down": "echo \"You can't stop me!\""

@@ -5,14 +5,21 @@ import jwt from "jsonwebtoken";
 export async function verifyJwt(request: FastifyRequest, reply: FastifyReply) {
   try {
     const authHeader = request.headers.authorization;
+
     if (!authHeader) {
       return reply.code(401).send({
         error: "Token não fornecido",
       });
     }
 
-    const token = authHeader.replace("Bearer ", "");
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!);
+    const token = authHeader.replace("Bearer ", ""),
+      decoded = jwt.verify(token, process.env.JWT_SECRET!);
+
+    if (!decoded) {
+      return reply.code(401).send({
+        error: "Token inválido",
+      });
+    }
 
     (request as any).user = decoded;
   } catch (err) {

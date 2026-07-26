@@ -6,31 +6,33 @@ import { generateProduct } from "../factories/product.factory";
 describe("Validation", () => {
   let adminToken: string;
   let clienteToken: string;
-  let produtoId: string;
-  let unidadeId: string;
+  let prodId: string;
+  let unitId: string;
 
   beforeAll(async () => {
+    const product = await generateProduct();
+
     adminToken = await loginAsAdmin();
     clienteToken = await loginAsCliente();
 
     const productRes = await request
       .post("/produtos")
       .set("Authorization", `Bearer ${adminToken}`)
-      .send(generateProduct());
-    produtoId = productRes.body.id;
+      .send(product);
+    prodId = productRes.body.id;
 
     const unitRes = await request
       .post("/unidades")
       .set("Authorization", `Bearer ${adminToken}`)
       .send({ nome: "Unidade Validação", endereco: "Rua X" });
-    unidadeId = unitRes.body.id;
+    unitId = unitRes.body.id;
   });
 
-  describe("T07 - Campo obrigatório ausente", () => {
-    it("deve retornar status 400 ou 422 ao faltar campo obrigatório no cadastro de produto", async () => {
+  describe("T07 - No required field", () => {
+    it("should return the 400 or 422 status", async () => {
       // CreateProductBody requires "nome" and "preco"
       const payload = {
-        descricao: "Produto sem nome e preco",
+        descricao: "No name and price product",
       };
 
       const response = await request
@@ -42,8 +44,8 @@ describe("Validation", () => {
     });
   });
 
-  describe("T08 - Formato inválido de email", () => {
-    it("deve retornar status 400 ou 422 no signup com email inválido", async () => {
+  describe("T08 - Invalid email format", () => {
+    it("should return the 400 or 422 status", async () => {
       const payload = generateUser({ email: "email_invalido.com" });
 
       const response = await request.post("/auth/signup").send(payload);
@@ -52,14 +54,14 @@ describe("Validation", () => {
     });
   });
 
-  describe("T09 - Quantidade negativa", () => {
-    it("deve retornar status 400 ou 422 ao criar pedido com quantidade negativa", async () => {
+  describe("T09 - Invalid quantity", () => {
+    it("should return the 400 or 422 status", async () => {
       const payload = {
-        unidade_id: unidadeId,
+        unidade_id: unitId,
         canal: "APP",
         itens: [
           {
-            produto_id: produtoId,
+            produto_id: prodId,
             quantidade: -5,
           },
         ],

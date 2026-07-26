@@ -1,13 +1,13 @@
-import pool from "@src/infra/db/database";
+import database from "@src/infra/db/database";
 import { Product, Unit } from "@src/domain/entities";
 import { QueryResult } from "pg";
 
 export class UnitRepository {
   async create(data: { nome: string; endereco: string }): Promise<Unit> {
-    const unitResult = await pool.query(
-      `INSERT INTO unidade (nome, endereco) VALUES ($1, $2) RETURNING *`,
-      [data.nome, data.endereco],
-    );
+    const unitResult = await database.query({
+      text: `INSERT INTO unidade (nome, endereco) VALUES ($1, $2) RETURNING *`,
+      values: [data.nome, data.endereco],
+    });
 
     return unitResult.rows[0];
   }
@@ -35,24 +35,28 @@ export class UnitRepository {
     query += "updated_at = NOW() ";
     query += `WHERE id = $${queryCount} RETURNING *`;
 
-    unitResult = await pool.query(query, [...queryValues, id]);
+    unitResult = await database.query({
+      text: query,
+      values: [...queryValues, id],
+    });
 
     return unitResult.rows[0];
   }
 
   async delete(id: string): Promise<Unit> {
-    const unitResult = await pool.query(
-      `DELETE FROM unidade WHERE id = $1 RETURNING *`,
-      [id],
-    );
+    const unitResult = await database.query({
+      text: `DELETE FROM unidade WHERE id = $1 RETURNING *`,
+      values: [id],
+    });
 
     return unitResult.rows[0];
   }
 
   async findById(id: string): Promise<Unit | undefined> {
-    const result = await pool.query("SELECT * FROM unidade WHERE id = $1", [
-      id,
-    ]);
+    const result = await database.query({
+      text: "SELECT * FROM unidade WHERE id = $1",
+      values: [id],
+    });
     return result.rows[0];
   }
 
@@ -60,23 +64,25 @@ export class UnitRepository {
     unitId: string,
     productId: string,
   ): Promise<Product | undefined> {
-    const result = await pool.query(
-      "SELECT * FROM produto WHERE id = $1 AND unidade_id = $2",
-      [productId, unitId],
-    );
+    const result = await database.query({
+      text: "SELECT * FROM produto WHERE id = $1 AND unidade_id = $2",
+      values: [productId, unitId],
+    });
     return result.rows[0];
   }
 
   async findAll(): Promise<Unit[]> {
-    const result = await pool.query("SELECT * FROM unidade ORDER BY nome DESC");
+    const result = await database.query({
+      text: "SELECT * FROM unidade ORDER BY nome DESC",
+    });
     return result.rows;
   }
 
   async listUnitProducts(id: string): Promise<Product[] | undefined> {
-    const result = await pool.query(
-      "SELECT * FROM produto WHERE unidade_id = $1",
-      [id],
-    );
+    const result = await database.query({
+      text: "SELECT * FROM produto WHERE unidade_id = $1",
+      values: [id],
+    });
     return result.rows;
   }
 }

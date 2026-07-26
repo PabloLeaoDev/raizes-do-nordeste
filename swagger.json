@@ -101,11 +101,11 @@
               "CLIENTE"
             ]
           },
-          "createdAt": {
+          "created_at": {
             "type": "string",
             "format": "date-time"
           },
-          "updatedAt": {
+          "updated_at": {
             "type": "string",
             "format": "date-time"
           }
@@ -134,11 +134,15 @@
             "minimum": 0,
             "default": 0
           },
-          "createdAt": {
+          "unidade_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "created_at": {
             "type": "string",
             "format": "date-time"
           },
-          "updatedAt": {
+          "updated_at": {
             "type": "string",
             "format": "date-time"
           }
@@ -274,11 +278,11 @@
           "total": {
             "type": "number"
           },
-          "createdAt": {
+          "created_at": {
             "type": "string",
             "format": "date-time"
           },
-          "updatedAt": {
+          "updated_at": {
             "type": "string",
             "format": "date-time"
           }
@@ -316,11 +320,11 @@
           "endereco": {
             "type": "string"
           },
-          "createdAt": {
+          "created_at": {
             "type": "string",
             "format": "date-time"
           },
-          "updatedAt": {
+          "updated_at": {
             "type": "string",
             "format": "date-time"
           }

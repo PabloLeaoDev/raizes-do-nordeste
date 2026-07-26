@@ -2,7 +2,7 @@ import { request } from "../helpers/request.helper";
 import { loginAsAdmin, loginAsCliente } from "../helpers/auth.helper";
 import { generateProduct } from "../factories/product.factory";
 
-describe("Contrato OpenAPI", () => {
+describe("OpenAPI Contract", () => {
   let [adminToken, clienteToken]: string[] = [];
 
   beforeAll(async () => {
@@ -10,15 +10,15 @@ describe("Contrato OpenAPI", () => {
     clienteToken = await loginAsCliente();
   });
 
-  describe("Validação de Contrato - Auth", () => {
-    it("POST /auth/login deve respeitar o contrato", async () => {
+  describe("Contract Validation - Auth", () => {
+    it("POST /auth/login should respect the contract", async () => {
       const loginPayload = {
         email: `teste_contract_${Date.now()}@mail.com`,
         senha: "password123",
       };
 
       await request.post("/auth/signup").send({
-        nome: "Usuario Contrato",
+        nome: "User Contract",
         perfil: "CLIENTE",
         ...loginPayload,
       });
@@ -30,18 +30,19 @@ describe("Contrato OpenAPI", () => {
     });
   });
 
-  describe("Validação de Contrato - Produtos", () => {
-    it("POST /produtos deve respeitar o contrato", async () => {
+  describe("Contract Validation - Products", () => {
+    it("POST /produtos should respect the contract", async () => {
+      const product = await generateProduct();
       const response = await request
         .post("/produtos")
         .set("Authorization", `Bearer ${adminToken}`)
-        .send(generateProduct());
+        .send(product);
 
       expect(response.status).toBe(201);
       expect(response).toSatisfyApiSpec();
     });
 
-    it("GET /produtos deve respeitar o contrato", async () => {
+    it("GET /produtos should respect the contract", async () => {
       const response = await request
         .get("/produtos")
         .set("Authorization", `Bearer ${adminToken}`);

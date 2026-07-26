@@ -5,25 +5,32 @@ export class ProductService {
   private repo = new ProductRepository();
 
   async createProduct(data: any) {
-    return await this.repo.create(data);
+    const product = await this.repo.create(data);
+    return { ...product, preco: Number(product.preco) };
   }
 
   async updateProduct(id: string, data: Partial<Product>) {
-    await this.repo.update(id, data);
+    const product = await this.repo.update(id, data);
+    return { ...product, preco: Number(product.preco) };
   }
 
   async deleteProduct(id: string) {
-    await this.repo.delete(id);
+    const product = await this.repo.delete(id);
+    return { ...product, preco: Number(product.preco) };
   }
 
   async list() {
-    return await this.repo.findAll();
+    const products = await this.repo.findAll();
+    return products.map((product) => ({
+      ...product,
+      preco: Number(product.preco),
+    }));
   }
 
   async findById(id: string) {
     const product = await this.repo.findById(id);
     if (!product) throw new Error("Produto não encontrado");
-    return product;
+    return { ...product, preco: Number(product.preco) };
   }
 
   async checkStock(id: string) {

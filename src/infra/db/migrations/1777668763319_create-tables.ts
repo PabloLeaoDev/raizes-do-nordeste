@@ -26,6 +26,11 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
       notNull: true,
       default: pgm.func("current_timestamp"),
     },
+    updated_at: {
+      type: "timestamp",
+      notNull: true,
+      default: pgm.func("current_timestamp"),
+    },
   });
 
   pgm.createTable("unidade", {
@@ -43,7 +48,8 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
     },
     updated_at: {
       type: "timestamp",
-      notNull: false,
+      notNull: true,
+      default: pgm.func("current_timestamp"),
     },
   });
 
@@ -65,7 +71,8 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
     },
     updated_at: {
       type: "timestamp",
-      notNull: false,
+      notNull: true,
+      default: pgm.func("current_timestamp"),
     },
   });
 
@@ -102,7 +109,8 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
     },
     updated_at: {
       type: "timestamp",
-      notNull: false,
+      notNull: true,
+      default: pgm.func("current_timestamp"),
     },
   });
 

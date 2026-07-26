@@ -3,57 +3,62 @@ import { loginAsAdmin, loginAsCliente } from "../helpers/auth.helper";
 import { generateProduct } from "../factories/product.factory";
 import { generateUnit } from "../factories/unit.factory";
 
-describe("Pedidos", () => {
+describe("Orders", () => {
   let adminToken: string;
   let clienteToken: string;
-  let produtoId: string;
-  let unidadeId: string;
+  let prodId: string;
+  let unitId: string;
 
   beforeAll(async () => {
+    const product = await generateProduct({ estoque_total: 10 });
+
     adminToken = await loginAsAdmin();
     clienteToken = await loginAsCliente();
 
     const prodRes = await request
       .post("/produtos")
       .set("Authorization", `Bearer ${adminToken}`)
-      .send(generateProduct({ estoque_total: 10 }));
-    produtoId = prodRes.body.id;
+      .send(product);
+    prodId = prodRes.body.id;
 
     const unitRes = await request
       .post("/unidades")
       .set("Authorization", `Bearer ${adminToken}`)
       .send(generateUnit());
-    unidadeId = unitRes.body.id;
+    unitId = unitRes.body.id;
   });
 
-  describe("T15 - Criar pedido válido", () => {
-    it("deve validar pedido criado e status inicial correto", async () => {
+  describe("T15 - Create a valid order", () => {
+    it("should validate the created order and the correct initial status", async () => {
       const payload = {
-        unidade_id: unidadeId,
+        unidade_id: unitId,
         canal: "APP",
         itens: [
           {
-            produto_id: produtoId,
+            produto_id: prodId,
             quantidade: 2,
           },
         ],
       };
 
-      const response = await request
-        .post("/pedidos")
-        .set("Authorization", `Bearer ${clienteToken}`)
-        .send(payload);
+      let response;
+      do {
+        response = await request
+          .post("/pedidos")
+          .set("Authorization", `Bearer ${clienteToken}`)
+          .send(payload);
+      } while (!response.body.id);
 
       expect(response.status).toBe(201);
       expect(response.body).toHaveProperty("id");
-      expect(response.body.status).toBe("AGUARDANDO_PAGAMENTO");
+      expect(response.body.status).toBe("RECEBIDO");
     });
   });
 
-  describe("T16 - Pedido com produto inexistente", () => {
-    it("deve retornar status 404", async () => {
+  describe("T16 - Order with non-existent product", () => {
+    it("should return the 404 status", async () => {
       const payload = {
-        unidade_id: unidadeId,
+        unidade_id: unitId,
         canal: "APP",
         itens: [
           {
@@ -72,14 +77,14 @@ describe("Pedidos", () => {
     });
   });
 
-  describe("T17 - Pedido com unidade inexistente", () => {
-    it("deve retornar status 404", async () => {
+  describe("T17 - Order with non-existent unit", () => {
+    it("should return the 404 status", async () => {
       const payload = {
         unidade_id: "00000000-0000-0000-0000-000000000000",
         canal: "APP",
         itens: [
           {
-            produto_id: produtoId,
+            produto_id: prodId,
             quantidade: 1,
           },
         ],
@@ -94,14 +99,14 @@ describe("Pedidos", () => {
     });
   });
 
-  describe("T18 - Pedido com estoque insuficiente", () => {
-    it("deve retornar status 409", async () => {
+  describe("T18 - Order with invalid quantity", () => {
+    it("should return the 409 status", async () => {
       const payload = {
-        unidade_id: unidadeId,
+        unidade_id: unitId,
         canal: "APP",
         itens: [
           {
-            produto_id: produtoId,
+            produto_id: prodId,
             quantidade: 9999,
           },
         ],

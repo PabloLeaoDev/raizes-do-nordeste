@@ -9,7 +9,7 @@ export class OrderController {
     try {
       const user = (req as any).user;
 
-      const result = await service.criarPedido({
+      const result = await service.createOrder({
         ...req.body,
         usuario_id: user.id,
       });
@@ -38,11 +38,11 @@ export class OrderController {
 
   async updateStatus(req: FastifyRequest | any, reply: FastifyReply) {
     try {
-      const user = (req as any).user;
-      const { id } = req.params;
-      const { status } = req.body;
+      const user = (req as any).user,
+        { id } = req.params,
+        { status } = req.body;
 
-      const result = await service.updateStatus(id, status as any, user.perfil);
+      const result = await service.updateStatus(id, status as any, user);
       logEvent("Update order success: ", result);
       return reply.send(result);
     } catch (error) {

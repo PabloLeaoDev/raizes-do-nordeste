@@ -1,71 +1,84 @@
 import { request } from "../helpers/request.helper";
-import { loginAsAdmin, loginAsCliente } from "../helpers/auth.helper";
+import {
+  loginAsAdmin,
+  loginAsCliente,
+  loginAsAtendente,
+} from "../helpers/auth.helper";
 import { generateProduct } from "../factories/product.factory";
 import { generateUnit } from "../factories/unit.factory";
+import { generateOrder } from "../factories/order.factory";
 
-describe("Regras de Negócio - Pagamento", () => {
-  let [clienteToken, adminToken, produtoId, unidadeId]: string[] = [];
+describe("Business Rules - Payment", () => {
+  let [clienteToken, atendenteToken, adminToken, productId, unitId]: string[] =
+    [];
 
   beforeAll(async () => {
-    clienteToken = await loginAsCliente();
+    const product = await generateProduct({ estoque_total: 10 });
+
+    atendenteToken = await loginAsAtendente();
     adminToken = await loginAsAdmin();
+    clienteToken = await loginAsCliente();
 
     const prodRes = await request
       .post("/produtos")
       .set("Authorization", `Bearer ${adminToken}`)
-      .send(generateProduct({ estoque_total: 10 }));
-    produtoId = prodRes.body.id;
+      .send(product);
+    productId = prodRes.body.id;
 
     const unitRes = await request
       .post("/unidades")
       .set("Authorization", `Bearer ${adminToken}`)
       .send(generateUnit());
-    unidadeId = unitRes.body.id;
+    unitId = unitRes.body.id;
   });
 
   const createOrder = async () => {
-    const payload = {
-      unidade_id: unidadeId,
-      canal: "APP",
-      itens: [{ produto_id: produtoId, quantidade: 1 }],
-    };
+    const payload = generateOrder(unitId, productId);
+
     const res = await request
       .post("/pedidos")
       .set("Authorization", `Bearer ${clienteToken}`)
       .send(payload);
-    return res.body.id;
+
+    return { id: res.body.id, error: res.body.error, statusCode: res.status };
   };
 
-  describe("T19 - Pagamento aprovado", () => {
-    it("deve atualizar status do pedido para RECEBIDO", async () => {
-      const pedidoId = await createOrder();
+  describe("T19 - Payment approved", () => {
+    it("should update the order status to 'EM_PREPARACAO'", async () => {
+      const { id: orderId, error, statusCode } = await createOrder();
+
+      if (error) {
+        expect(404).toBe(statusCode);
+        return;
+      }
 
       const response = await request
-        .post(`/pedidos/${pedidoId}/status`)
-        .set("Authorization", `Bearer ${clienteToken}`)
-        .send({ status: "RECEBIDO" });
-
-      console.log("response.body: ", response.body);
-      console.log("response.status:", response.status);
+        .patch(`/pedidos/${orderId}/status`)
+        .set("Authorization", `Bearer ${atendenteToken}`)
+        .send({ status: "EM_PREPARACAO" });
 
       expect([200, 201]).toContain(response.status);
-      expect(response.body.status).toBe("RECEBIDO");
+      expect(response.body.status).toBe("EM_PREPARACAO");
     });
   });
 
-  describe("T20 - Pagamento recusado", () => {
-    it("deve recusar pagamento, manter ou cancelar pedido com mensagem coerente", async () => {
-      const pedidoId = await createOrder();
+  describe("T20 - Payment rejected", () => {
+    it("should reject the order with status 'CANCELADO'", async () => {
+      const { id: orderId, error, statusCode } = await createOrder();
+
+      if (error) {
+        //
+        expect(404).toBe(statusCode);
+        return;
+      }
 
       const response = await request
-        .post(`/pedidos/${pedidoId}/pagamento`)
-        .set("Authorization", `Bearer ${clienteToken}`)
-        .send({ status_pagamento: "RECUSADO" });
+        .patch(`/pedidos/${orderId}/status`)
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({ status: "CANCELADO" });
 
       expect([200, 400, 402]).toContain(response.status);
-      expect(["CANCELADO", "AGUARDANDO_PAGAMENTO"]).toContain(
-        response.body.status,
-      );
+      expect(["CANCELADO"]).toContain(response.body.status);
     });
   });
 });

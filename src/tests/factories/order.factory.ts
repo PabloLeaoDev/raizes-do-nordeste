@@ -9,7 +9,7 @@ export const generateOrder = (
     itens: [
       {
         produto_id,
-        quantidade: 2,
+        quantidade: 1,
       },
     ],
     ...overrides,

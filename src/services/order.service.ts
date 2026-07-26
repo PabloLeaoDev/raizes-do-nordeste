@@ -3,82 +3,62 @@ import { ProductRepository } from "@src/infra/repositories/product.repository";
 import { OrderRepository } from "@src/infra/repositories/order.repository";
 import { PaymentMockProvider } from "@src/infra/providers/payment-mock.provider";
 import { OrderStatus, UserProfile } from "@src/domain/entities";
+import { UserRepository } from "@src/infra/repositories/user.repository";
 
 export class OrderService {
   private productRepo = new ProductRepository();
   private orderRepo = new OrderRepository();
   private paymentMock = new PaymentMockProvider();
 
-  async criarPedido(data: {
+  async createOrder(data: {
     usuario_id: string;
     unidade_id: string;
     canal: string;
     itens: { produto_id: string; quantidade: number; preco_unitario: number }[];
   }) {
-    const client = await pool.connect();
+    let total = 0;
 
-    try {
-      await client.query("BEGIN");
+    for (const item of data.itens) {
+      const produto = await this.productRepo.findByIdForUpdate(item.produto_id);
 
-      let total = 0;
-
-      for (const item of data.itens) {
-        const produto = await this.productRepo.findByIdForUpdate(
-          item.produto_id,
-          client,
-        );
-
-        if (!produto) {
-          throw new Error(`Produto ${item.produto_id} não encontrado`);
-        }
-
-        if (produto.estoque_total < item.quantidade) {
-          throw new Error(
-            `Estoque insuficiente para o produto ${produto.nome}`,
-          );
-        }
-
-        const novoEstoque = produto.estoque_total - item.quantidade;
-        await this.productRepo.updateStock(produto.id, novoEstoque, client);
-
-        total += item.quantidade * Number(produto.preco);
-        item.preco_unitario = Number(produto.preco);
+      if (!produto) {
+        throw new Error(`Produto ${item.produto_id} não encontrado`);
       }
 
-      const order = await this.orderRepo.create(
-        {
-          usuario_id: data.usuario_id,
-          unidade_id: data.unidade_id,
-          canal: data.canal as any,
-          status: OrderStatus.AGUARDANDO_PAGAMENTO,
-          total,
-        },
-        data.itens,
-        client,
-      );
-
-      const paymentResult = await this.paymentMock.processPayment(
-        order.id,
-        total,
-      );
-
-      if (!paymentResult.success) {
-        throw new Error("Pagamento recusado");
+      if (produto.estoque_total < item.quantidade) {
+        throw new Error(`Estoque insuficiente para o produto ${produto.nome}`);
       }
 
-      await client.query("UPDATE pedido SET status = $1 WHERE id = $2", [
-        OrderStatus.RECEBIDO,
-        order.id,
-      ]);
-      await client.query("COMMIT");
+      const novoEstoque = produto.estoque_total - item.quantidade;
+      await this.productRepo.updateStock(produto.id, novoEstoque);
 
-      return { ...order, status: OrderStatus.RECEBIDO, payment: paymentResult };
-    } catch (error) {
-      await client.query("ROLLBACK");
-      throw error;
-    } finally {
-      client.release();
+      total += item.quantidade * Number(produto.preco);
+      item.preco_unitario = Number(produto.preco);
     }
+
+    const order = await this.orderRepo.create(
+      {
+        usuario_id: data.usuario_id,
+        unidade_id: data.unidade_id,
+        canal: data.canal as any,
+        status: OrderStatus.AGUARDANDO_PAGAMENTO,
+        total,
+      },
+      data.itens,
+    );
+
+    const paymentResult = await this.paymentMock.processPayment(
+      order.id,
+      total,
+    );
+
+    if (!paymentResult.success) {
+      throw new Error("Pagamento recusado");
+    }
+
+    const process = await this.orderRepo.processPayment(order.id);
+
+    return { ...order, status: OrderStatus.RECEBIDO, payment: paymentResult };
   }
 
   async list() {
@@ -88,7 +68,7 @@ export class OrderService {
   async updateStatus(
     pedidoId: string,
     newStatus: OrderStatus,
-    userProfile: UserProfile,
+    user: { id: string },
   ) {
     const order = await this.orderRepo.findById(pedidoId);
     if (!order) throw new Error("Pedido não encontrado");
@@ -113,6 +93,12 @@ export class OrderService {
         `Transição inválida de ${order.status} para ${newStatus}`,
       );
     }
+
+    const { perfil: userProfile } = (await new UserRepository().findById(
+      user.id,
+    )) as {
+      perfil: UserProfile;
+    };
 
     if (
       newStatus === OrderStatus.CANCELADO &&

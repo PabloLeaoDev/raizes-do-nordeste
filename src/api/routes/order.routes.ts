@@ -11,7 +11,7 @@ const controller = new OrderController();
 
 export const orderRoutes: FastifyPluginAsyncZod = async (app) => {
   app.post("/pedidos", {
-    preHandler: [verifyJwt],
+    preHandler: [verifyJwt, verifyProfile(["CLIENTE"])],
     schema: {
       tags: ["Orders"],
       security: [{ bearerAuth: [] }],

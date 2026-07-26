@@ -39,7 +39,7 @@ cp .env.example .env
 **Configuração recomendada para desenvolvimento:**
 
 ```env
-# Backend
+PORT=3000
 APP_HOST=http://localhost
 
 DB_HOST=localhost
@@ -51,6 +51,8 @@ DB_NAME=raizes-db
 DATABASE_URL=postgres://postgres:postgres@localhost:5432/raizes-db
 
 JWT_SECRET=supersecret
+
+NODE_ENV=development
 ```
 
 ### 4. Inicie a infra e o servidor
@@ -74,6 +76,12 @@ Para rodar os testes (certifique-se que a aplicação está rodando):
 
 ```bash
 npm test
+```
+
+Ou em modo `watch`
+
+```bash
+npm test:watch
 ```
 
 ## Endpoints Principais

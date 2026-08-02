@@ -10,6 +10,6 @@ export const signupSchema = z.object({
   email: z.email(),
   senha: z.string().min(6),
   perfil: z
-    .enum(["ADMIN", "GERENTE", "ATENDENTE", "CLIENTE"])
+    .enum(["ADMIN", "GERENTE", "ATENDENTE", "COZINHA", "CLIENTE"])
     .default("CLIENTE"),
 });

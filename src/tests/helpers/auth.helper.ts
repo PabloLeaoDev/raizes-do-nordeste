@@ -2,7 +2,7 @@ import { request } from "./request.helper";
 import { generateUser } from "../factories/user.factory";
 
 async function getAuthTokenForRole(
-  perfil: "ADMIN" | "GERENTE" | "ATENDENTE" | "CLIENTE",
+  perfil: "ADMIN" | "GERENTE" | "COZINHA" | "ATENDENTE" | "CLIENTE",
 ) {
   const user = generateUser({ perfil });
 
@@ -25,4 +25,5 @@ async function getAuthTokenForRole(
 export const loginAsAdmin = () => getAuthTokenForRole("ADMIN");
 export const loginAsGerente = () => getAuthTokenForRole("GERENTE");
 export const loginAsAtendente = () => getAuthTokenForRole("ATENDENTE");
+export const loginAsCozinha = () => getAuthTokenForRole("COZINHA");
 export const loginAsCliente = () => getAuthTokenForRole("CLIENTE");

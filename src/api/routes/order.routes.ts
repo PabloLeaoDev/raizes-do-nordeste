@@ -30,7 +30,10 @@ export const orderRoutes: FastifyPluginAsyncZod = async (app) => {
   });
 
   app.patch("/pedidos/:id/status", {
-    preHandler: [verifyJwt, verifyProfile(["ADMIN", "GERENTE", "ATENDENTE"])],
+    preHandler: [
+      verifyJwt,
+      verifyProfile(["ADMIN", "GERENTE", "ATENDENTE", "COZINHA"]),
+    ],
     schema: {
       tags: ["Orders"],
       security: [{ bearerAuth: [] }],

@@ -17,11 +17,11 @@ export class OrderController {
       logEvent("Create order success: ", result);
       return reply.code(201).send(result);
     } catch (error) {
-      logEvent("Create order error: ", error);
-      let message = (error as Error).message,
+      let { message } = error as Error,
         statusCode = 404;
+      logEvent("Create order error: ", message);
       if (message.includes("insuficiente")) statusCode = 409;
-      return reply.code(statusCode).send({ error: (error as Error).message });
+      return reply.code(statusCode).send({ error: message });
     }
   }
 

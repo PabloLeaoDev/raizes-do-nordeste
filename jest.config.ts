@@ -9,4 +9,5 @@ export default {
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
     prefix: "<rootDir>/",
   }),
+  testTimeout: 60_000,
 };

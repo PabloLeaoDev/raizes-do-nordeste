@@ -12,6 +12,7 @@ import { productRoutes } from "@src/api/routes/product.routes";
 import { orderRoutes } from "@src/api/routes/order.routes";
 import { unitRoutes } from "@src/api/routes/unit.routes";
 import { userRoutes } from "@src/api/routes/user.routes";
+import { loyaltyRoutes } from "@src/api/routes/loyalty.routes";
 
 export const app = Fastify({
   logger: true,
@@ -62,6 +63,7 @@ const appRoutes = [
   orderRoutes,
   productRoutes,
   userRoutes,
+  loyaltyRoutes,
 ];
 
 for (let routes of appRoutes) app.register(routes, { prefix });

@@ -13,7 +13,8 @@
       "@src/*": [
         "src/*"
       ]
-    }
+    },
+    "isolatedModules": true
   },
   "include": [
     "src/**/*"

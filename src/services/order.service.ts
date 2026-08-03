@@ -1,4 +1,3 @@
-import pool from "@src/infra/db/database";
 import { ProductRepository } from "@src/infra/repositories/product.repository";
 import { OrderRepository } from "@src/infra/repositories/order.repository";
 import { PaymentMockProvider } from "@src/infra/providers/payment-mock.provider";

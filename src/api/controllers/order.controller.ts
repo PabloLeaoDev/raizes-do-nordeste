@@ -17,9 +17,9 @@ export class OrderController {
       logEvent("Create order success: ", result);
       return reply.code(201).send(result);
     } catch (error) {
-      logEvent("Create order error: ", error);
       let message = (error as Error).message,
         statusCode = 404;
+      logEvent("Create order error: ", message);
       if (message.includes("insuficiente")) statusCode = 409;
       return reply.code(statusCode).send({ error: (error as Error).message });
     }
@@ -31,7 +31,7 @@ export class OrderController {
       logEvent("List orders success: ", result);
       return reply.send(result);
     } catch (error) {
-      logEvent("List orders error: ", error);
+      logEvent("List orders error: ", error.message);
       return reply.code(400).send({ error: (error as Error).message });
     }
   }
@@ -46,7 +46,7 @@ export class OrderController {
       logEvent("Update order success: ", result);
       return reply.send(result);
     } catch (error) {
-      logEvent("Update order error: ", error);
+      logEvent("Update order error: ", error.message);
       return reply.code(400).send({ error: (error as Error).message });
     }
   }

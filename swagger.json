@@ -278,6 +278,15 @@
           "total": {
             "type": "number"
           },
+          "programa_fidelidade": {
+            "type": "number"
+          },
+          "preco_desconto": {
+            "type": "number"
+          },
+          "preco_final": {
+            "type": "number"
+          },
           "created_at": {
             "type": "string",
             "format": "date-time"

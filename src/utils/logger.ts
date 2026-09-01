@@ -10,7 +10,7 @@ if (!fs.existsSync(LOG_DIR)) {
 
 export function logEvent(event: string, payload: any) {
   const timestamp = new Date().toISOString();
-  const logLine = `[${timestamp}] ${event} ${JSON.stringify(payload)}\n`;
+  const logLine = `[${timestamp}] ${event} ${payload ? JSON.stringify(payload) : ""}\n`;
 
   console.log(logLine.trim());
 

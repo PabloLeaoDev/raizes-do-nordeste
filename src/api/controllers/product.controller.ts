@@ -1,4 +1,5 @@
 import { ProductService } from "@src/services/product.service";
+import { logEvent } from "@src/utils/logger";
 import { FastifyRequest, FastifyReply } from "fastify";
 
 export class ProductController {
@@ -7,9 +8,14 @@ export class ProductController {
   async create(req: FastifyRequest | any, reply: FastifyReply) {
     try {
       const result = await this.service.createProduct(req.body);
+      logEvent("Product was created", { product_id: result.id });
+
       return reply.code(201).send(result);
     } catch (error) {
-      return reply.code(400).send({ error: (error as Error).message });
+      const { message } = (error as Error);
+      logEvent("[ERROR] Create product error occurred", message);
+
+      return reply.code(400).send({ error: message });
     }
   }
 
@@ -41,9 +47,14 @@ export class ProductController {
         productData,
       );
 
+      logEvent("Product was updated", { product_id: result });
+
       return reply.code(200).send(result);
     } catch (error) {
-      return reply.code(400).send({ error: (error as Error).message });
+      const { message } = (error as Error);
+      logEvent("[ERROR] Update product error occurred", message);
+
+      return reply.code(400).send({ error: message });
     }
   }
 
@@ -51,33 +62,47 @@ export class ProductController {
     try {
       const unit = await this.service.findById(req.params.id);
 
-      if (!unit) {
+      if (!unit)
         throw new Error("Unidade não encontrada");
-      }
 
       const result = await this.service.deleteProduct(req.params.id);
 
+      logEvent("Product was deleted", { product_name: result.nome });
+
       return reply.code(200).send(result);
     } catch (error) {
-      return reply.code(404).send({ error: (error as Error).message });
+      const { message } = (error as Error);
+      logEvent("[ERROR] Delete product error occurred", message);
+
+      return reply.code(404).send({ error: message });
     }
   }
 
   async list(req: FastifyRequest, reply: FastifyReply) {
     try {
       const result = await this.service.list();
+      logEvent("Products was listed");
+
       return reply.send(result);
     } catch (error) {
-      return reply.code(400).send({ error: (error as Error).message });
+      const { message } = (error as Error);
+      logEvent("[ERROR] List products error occurred", message);
+
+      return reply.code(400).send({ error: message });
     }
   }
 
   async findById(req: FastifyRequest | any, reply: FastifyReply) {
     try {
       const result = (await this.service.findById(req.params.id)) || null;
+      logEvent("Products was finded", { product_id: result.id });
+
       return reply.code(200).send(result);
     } catch (error) {
-      return reply.code(404).send({ error: (error as Error).message });
+      const { message } = (error as Error);
+      logEvent("[ERROR] Find product error occurred", message);
+
+      return reply.code(404).send({ error: message });
     }
   }
 }

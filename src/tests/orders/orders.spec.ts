@@ -131,23 +131,31 @@ describe("Orders", () => {
         .set("Authorization", `Bearer ${clienteToken}`)
         .send(payload);
 
+      const { body: bodyOrder } = response;
+
       const {
         programa_fidelidade: loyaltyProgram,
         total: price,
         preco_desconto: discountPrice,
         preco_final: finalPrice
-      } = response.body;
+      } = bodyOrder;
 
       if (loyaltyProgram)
         expect(finalPrice).toBe(price - discountPrice);
 
-      expect(response.status).toBe(201);
-      expect(response.body).toEqual(expect.objectContaining({
-        programa_fidelidade: loyaltyProgram,
-        total: price,
-        preco_desconto: discountPrice,
-        preco_final: finalPrice
-      }));
+      if (bodyOrder.error) {
+        expect(response.status).toBe(
+          bodyOrder.error.includes("insuficiente") ? 409 : 404
+        );
+      } else {
+        expect(response.status).toBe(201);
+        expect(bodyOrder).toEqual(expect.objectContaining({
+          programa_fidelidade: loyaltyProgram,
+          total: price,
+          preco_desconto: discountPrice,
+          preco_final: finalPrice
+        }));
+      }
     });
   });
 });

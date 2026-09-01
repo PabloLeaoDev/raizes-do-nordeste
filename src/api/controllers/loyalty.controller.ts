@@ -11,11 +11,14 @@ export class LoyaltyController {
       const { id } = req.params;
       if (!id || !isUuid(id)) throw new Error("The user indentifier is invalid: " + id);
       const result = await service.userHasLoyaltyProgram(id);
-      logEvent("List Loyaltys success: ", result);
+      logEvent("List loyaltys successfully");
+
       return reply.send({ "programa_fidelidade": result });
     } catch (error) {
-      logEvent("List Loyaltys error: ", error);
-      return reply.code(400).send({ error: (error as Error).message });
+      const { message } = (error as Error);
+      logEvent("[ERROR] List Loyaltys error: ", message);
+
+      return reply.code(400).send({ error: message });
     }
   }
 }

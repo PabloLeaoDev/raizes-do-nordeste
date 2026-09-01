@@ -122,6 +122,10 @@ npm test:watch
 - `PUT /unidades/:id` - Atualizar Unidade (ADMIN)
 - `DELETE /unidades/:id` - Deletar Unidade (ADMIN)
 
+### Programa de Fidelidade
+
+- `/programa-fidelidade/:userId` - Verificar se o cliente está com o programa de fidelidade ativo (ADMIN, GERENTE, ATENDENTE, CLIENTE)
+
 ## Estrutura do Projeto
 
 ```

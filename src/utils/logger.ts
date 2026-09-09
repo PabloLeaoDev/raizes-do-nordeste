@@ -8,7 +8,7 @@ if (!fs.existsSync(LOG_DIR)) {
   fs.mkdirSync(LOG_DIR, { recursive: true });
 }
 
-export function logEvent(event: string, payload: any) {
+export function logEvent(event: string, payload: any = "") {
   const timestamp = new Date().toISOString();
   const logLine = `[${timestamp}] ${event} ${payload ? JSON.stringify(payload) : ""}\n`;
 

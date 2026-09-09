@@ -3,10 +3,13 @@ import { OrderRepository } from "@src/infra/repositories/order.repository";
 import { PaymentMockProvider } from "@src/infra/providers/payment-mock.provider";
 import { OrderStatus, UserProfile } from "@src/domain/entities";
 import { UserRepository } from "@src/infra/repositories/user.repository";
+import { LoyaltyService } from "@src/services/loyalty.service";
+
 
 export class OrderService {
   private productRepo = new ProductRepository();
   private orderRepo = new OrderRepository();
+  private loyaltyService = new LoyaltyService();
   private paymentMock = new PaymentMockProvider();
 
   async createOrder(data: {
@@ -18,21 +21,21 @@ export class OrderService {
     let total = 0;
 
     for (const item of data.itens) {
-      const produto = await this.productRepo.findByIdForUpdate(item.produto_id);
+      const product = await this.productRepo.findByIdForUpdate(item.produto_id);
 
-      if (!produto) {
+      if (!product) {
         throw new Error(`Produto ${item.produto_id} não encontrado`);
       }
 
-      if (produto.estoque_total < item.quantidade) {
-        throw new Error(`Estoque insuficiente para o produto ${produto.nome}`);
+      if (product.estoque_total < item.quantidade) {
+        throw new Error(`Estoque insuficiente para o produto ${product.nome}`);
       }
 
-      const novoEstoque = produto.estoque_total - item.quantidade;
-      await this.productRepo.updateStock(produto.id, novoEstoque);
+      const newStock = product.estoque_total - item.quantidade;
+      await this.productRepo.updateStock(product.id, newStock);
 
-      total += item.quantidade * Number(produto.preco);
-      item.preco_unitario = Number(produto.preco);
+      total += item.quantidade * Number(product.preco);
+      item.preco_unitario = Number(product.preco);
     }
 
     const order = await this.orderRepo.create(
@@ -46,18 +49,24 @@ export class OrderService {
       data.itens,
     );
 
+    const hasLoyaltyProgram = await this.loyaltyService.userHasLoyaltyProgram(data.usuario_id);
+
+    let getDiscount = { discount: 0, totalWithDiscount: total };
+    if (hasLoyaltyProgram)
+      getDiscount = this.loyaltyService.applyLoyaltyProgramDiscount(total);
+
     const paymentResult = await this.paymentMock.processPayment(
       order.id,
-      total,
+      getDiscount.totalWithDiscount,
     );
 
     if (!paymentResult.success) {
       throw new Error("Pagamento recusado");
     }
 
-    const process = await this.orderRepo.processPayment(order.id);
+    await this.orderRepo.processPayment(order.id);
 
-    return { ...order, status: OrderStatus.RECEBIDO, payment: paymentResult };
+    return { ...order, status: OrderStatus.RECEBIDO, programa_fidelidade: hasLoyaltyProgram, preco_desconto: getDiscount.discount, preco_final: getDiscount.totalWithDiscount, payment: paymentResult };
   }
 
   async list() {

@@ -1,4 +1,5 @@
 import { UserService } from "@src/services/user.service";
+import { logEvent } from "@src/utils/logger";
 import { FastifyRequest, FastifyReply } from "fastify";
 
 export class UserController {
@@ -7,9 +8,14 @@ export class UserController {
   async create(req: FastifyRequest | any, reply: FastifyReply) {
     try {
       const result = await this.service.createUser(req.body);
+      logEvent("User was created: ", { user_id: result.id });
+
       return reply.code(201).send(result);
     } catch (error) {
-      return reply.code(400).send({ error: (error as Error).message });
+      const { message } = (error as Error);
+      logEvent("[ERROR] Create user error occurred", message);
+
+      return reply.code(400).send({ error: message });
     }
   }
 
@@ -39,9 +45,15 @@ export class UserController {
         id: req.params.id,
         ...userForUpdateData,
       });
+
+      logEvent("User was updated: ", { user_id: result.id });
+
       return reply.code(200).send(result);
     } catch (error) {
-      return reply.code(400).send({ error: (error as Error).message });
+      const { message } = (error as Error);
+      logEvent("[ERROR] Update user error occurred", message);
+
+      return reply.code(400).send({ error: message });
     }
   }
 
@@ -50,27 +62,43 @@ export class UserController {
       const user = await this.service.findById(req.params.id);
       if (!user) throw new Error("Usuário não encontrado");
       const result = await this.service.deleteUser(req.params.id);
+
+      logEvent("User was deleted: ", message);
+
       return reply.code(200).send(result);
     } catch (error) {
-      return reply.code(400).send({ error: (error as Error).message });
+      const { message } = (error as Error);
+      logEvent("[ERROR] Delete user error occurred", message);
+
+      return reply.code(400).send({ error: message });
     }
   }
 
   async list(req: FastifyRequest | any, reply: FastifyReply) {
     try {
       const result = await this.service.list();
+      logEvent("Users was listed");
+
       return reply.code(200).send(result);
     } catch (error) {
-      return reply.code(400).send({ error: (error as Error).message });
+      const { message } = (error as Error);
+      logEvent("[ERROR] List users error occurred", message);
+
+      return reply.code(400).send({ error: message });
     }
   }
 
   async findById(req: FastifyRequest | any, reply: FastifyReply) {
     try {
       const result = (await this.service.findById(req.params.id)) || null;
+      logEvent("User was finded: ", message);
+
       return reply.code(200).send(result);
     } catch (error) {
-      return reply.code(400).send({ error: (error as Error).message });
+      const { message } = (error as Error);
+      logEvent("[ERROR] Find user error occurred", message);
+
+      return reply.code(400).send({ error: message });
     }
   }
 }

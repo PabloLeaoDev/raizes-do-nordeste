@@ -9,4 +9,9 @@ export class LoyaltyService {
     if (userOrdersCount > 0 && userOrdersCount % 5 === 0) return true;
     return false;
   }
+
+  applyLoyaltyProgramDiscount(total: number): { discount: number, totalWithDiscount: number } {
+    const discount = 30, totalWithDiscount = total - ((total * discount) / 100);
+    return { discount, totalWithDiscount };
+  }
 }

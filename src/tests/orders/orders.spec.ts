@@ -2,6 +2,7 @@ import { request } from "../helpers/request.helper";
 import { loginAsAdmin, loginAsCliente } from "../helpers/auth.helper";
 import { generateProduct } from "../factories/product.factory";
 import { generateUnit } from "../factories/unit.factory";
+import { generateOrder } from "../factories/order.factory";
 
 describe("Orders", () => {
   let adminToken: string;
@@ -118,6 +119,43 @@ describe("Orders", () => {
         .send(payload);
 
       expect(response.status).toBe(409);
+    });
+  });
+
+  describe("T23 - Valid the loyalty program", () => {
+    it("test endpoint", async () => {
+      const payload = generateOrder(unitId, prodId);
+
+      const response = await request
+        .post("/pedidos")
+        .set("Authorization", `Bearer ${clienteToken}`)
+        .send(payload);
+
+      const { body: bodyOrder } = response;
+
+      const {
+        programa_fidelidade: loyaltyProgram,
+        total: price,
+        preco_desconto: discountPrice,
+        preco_final: finalPrice
+      } = bodyOrder;
+
+      if (loyaltyProgram)
+        expect(finalPrice).toBe(price - discountPrice);
+
+      if (bodyOrder.error) {
+        expect(response.status).toBe(
+          bodyOrder.error.includes("insuficiente") ? 409 : 404
+        );
+      } else {
+        expect(response.status).toBe(201);
+        expect(bodyOrder).toEqual(expect.objectContaining({
+          programa_fidelidade: loyaltyProgram,
+          total: price,
+          preco_desconto: discountPrice,
+          preco_final: finalPrice
+        }));
+      }
     });
   });
 });

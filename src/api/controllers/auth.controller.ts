@@ -1,7 +1,8 @@
 import { AuthService } from "@src/services/auth.service";
+import { loginSchema, signupSchema } from "@src/api/schemas/auth.schema";
+import { logEvent } from "@src/utils/logger";
 import { FastifyRequest, FastifyReply } from "fastify";
 import { z } from "zod";
-import { loginSchema, signupSchema } from "@src/api/schemas/auth.schema";
 
 const service = new AuthService();
 
@@ -13,9 +14,14 @@ export class AuthController {
     try {
       const { email, senha } = req.body;
       const result = await service.login(email, senha);
+      logEvent("User was logged: ", { user_id: result.user.id });
+
       return reply.send(result);
     } catch (error) {
-      return reply.code(401).send({ error: (error as Error).message });
+      const { message } = (error as Error);
+      logEvent("[ERROR] Login error occurred: ", message);
+
+      return reply.code(401).send({ error: message });
     }
   }
 
@@ -26,9 +32,14 @@ export class AuthController {
     try {
       const { nome, email, senha, perfil } = req.body;
       const result = await service.signup(nome, email, senha, perfil);
+      logEvent("User was registered: ", { user_email: result.user.email });
+
       return reply.send(result);
     } catch (error) {
-      return reply.code(401).send({ error: (error as Error).message });
+      const { message } = (error as Error);
+      logEvent("[ERROR] User register error occurred: ", message);
+
+      return reply.code(401).send({ error: message });
     }
   }
 }

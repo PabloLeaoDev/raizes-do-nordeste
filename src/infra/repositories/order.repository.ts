@@ -47,7 +47,7 @@ export class OrderRepository {
       await database.query({ text: "COMMIT" });
     } catch (error) {
       await database.query({ text: "ROLLBACK" });
-      throw error;
+      throw new Error(error.message);
     }
   }
 
